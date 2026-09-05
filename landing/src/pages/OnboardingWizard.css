@@ -1,0 +1,897 @@
+/* =========================================================================
+   DEALDESK ONBOARDING WIZARD - UNIQUE NAMESPACED STYLES (dd-onboard-*)
+   ========================================================================= */
+
+.dd-onboard-viewport {
+  min-height: 100vh;
+  background-color: #f8fafc;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  color: #0f172a;
+  padding: 32px 16px 64px;
+  display: flex;
+  justify-content: center;
+}
+
+.dd-onboard-container {
+  max-width: 980px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* Header */
+.dd-onboard-header {
+  text-align: center;
+}
+
+.dd-onboard-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #1e3a8a;
+  font-weight: 700;
+  font-size: 1.125rem;
+  text-decoration: none;
+  margin-bottom: 8px;
+}
+
+.dd-onboard-logo-wrap {
+  width: 32px;
+  height: 32px;
+  background-color: #1e3a8a;
+  color: #ffffff;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+}
+
+.dd-onboard-main-title {
+  font-size: clamp(1.625rem, 3.5vw, 2.25rem);
+  font-weight: 800;
+  color: #0f172a;
+  letter-spacing: -0.02em;
+}
+
+.dd-onboard-subtitle {
+  font-size: 0.9375rem;
+  color: #64748b;
+  margin-top: 4px;
+}
+
+/* Main Card Surface */
+.dd-onboard-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 32px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.dd-onboard-step-intro {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.dd-onboard-btn-back {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: transparent;
+  border: none;
+  color: #64748b;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  cursor: pointer;
+  margin-bottom: 4px;
+  padding: 0;
+}
+
+.dd-onboard-btn-back:hover {
+  color: #1e3a8a;
+}
+
+.dd-onboard-step-pill {
+  display: inline-block;
+  align-self: flex-start;
+  background: #eff6ff;
+  color: #1e40af;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 9999px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.dd-onboard-step-intro h2 {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.dd-onboard-step-intro p {
+  font-size: 0.875rem;
+  color: #64748b;
+}
+
+/* Controls Bar (Currency & Language & Billing Cycle) */
+.dd-onboard-controls-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 12px 16px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+}
+
+.dd-onboard-selectors-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.dd-onboard-currency-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: #475569;
+}
+
+.dd-onboard-select-sm {
+  padding: 6px 10px;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  background: #ffffff;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: #0f172a;
+  outline: none;
+}
+
+.dd-onboard-cycle-toggle {
+  display: flex;
+  background: #e2e8f0;
+  padding: 3px;
+  border-radius: 9999px;
+  gap: 2px;
+}
+
+.dd-onboard-toggle-btn {
+  background: transparent;
+  border: none;
+  padding: 6px 14px;
+  border-radius: 9999px;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: #64748b;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 150ms ease;
+}
+
+.dd-onboard-toggle-btn.active {
+  background: #ffffff;
+  color: #1e3a8a;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.dd-onboard-save-pill {
+  background: #10b981;
+  color: #ffffff;
+  font-size: 0.6875rem;
+  padding: 2px 6px;
+  border-radius: 9999px;
+  font-weight: 700;
+}
+
+/* Free Trial Hero Card */
+.dd-onboard-trial-hero-card {
+  background: #ffffff;
+  border: 2px solid #cbd5e1;
+  border-radius: 12px;
+  padding: 20px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  transition: all 150ms ease;
+}
+
+.dd-onboard-trial-hero-card:hover {
+  border-color: #1e3a8a;
+  background: #f8fafc;
+}
+
+.dd-onboard-trial-hero-card.selected {
+  border-color: #1e3a8a;
+  background: #f0fdf4;
+  box-shadow: 0 4px 6px -1px rgba(30, 58, 138, 0.1);
+}
+
+.dd-onboard-trial-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.dd-onboard-trial-icon {
+  width: 48px;
+  height: 48px;
+  background: #dbeafe;
+  color: #1e40af;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+  flex-shrink: 0;
+}
+
+.dd-onboard-trial-badge {
+  display: inline-block;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #166534;
+  background: #dcfce7;
+  padding: 2px 8px;
+  border-radius: 9999px;
+  margin-bottom: 4px;
+}
+
+.dd-onboard-trial-hero-card h3 {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.dd-onboard-trial-hero-card p {
+  font-size: 0.8125rem;
+  color: #64748b;
+  margin-top: 2px;
+}
+
+.dd-onboard-trial-action {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.dd-onboard-radio-circle {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 2px solid #94a3b8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  background: #ffffff;
+}
+
+.dd-onboard-trial-hero-card.selected .dd-onboard-radio-circle {
+  border-color: #1e3a8a;
+}
+
+.dd-onboard-radio-label {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: #1e3a8a;
+}
+
+/* Or Divider */
+.dd-onboard-or-divider {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: #94a3b8;
+}
+
+.dd-onboard-or-divider::before,
+.dd-onboard-or-divider::after {
+  content: '';
+  flex: 1;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.dd-onboard-or-divider span {
+  padding: 0 16px;
+}
+
+/* Subscription Plans Grid */
+.dd-onboard-plans-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 16px;
+}
+
+.dd-onboard-plan-card {
+  background: #f8fafc;
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 20px 16px;
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+  position: relative;
+  transition: all 150ms ease;
+}
+
+.dd-onboard-plan-card:hover {
+  border-color: #1e3a8a;
+  background: #ffffff;
+}
+
+.dd-onboard-plan-card.selected {
+  border-color: #1e3a8a;
+  background: #ffffff;
+  box-shadow: 0 4px 8px -1px rgba(30, 58, 138, 0.12);
+}
+
+.dd-onboard-popular-tag {
+  position: absolute;
+  top: -10px;
+  right: 14px;
+  background: #1e3a8a;
+  color: #ffffff;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 9999px;
+  text-transform: uppercase;
+}
+
+.dd-onboard-plan-name {
+  font-size: 1.125rem;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.dd-onboard-plan-desc {
+  font-size: 0.75rem;
+  color: #64748b;
+  margin: 4px 0 12px;
+  min-height: 36px;
+  line-height: 1.4;
+}
+
+.dd-onboard-plan-price-row {
+  display: flex;
+  align-items: baseline;
+  gap: 2px;
+  margin-bottom: 14px;
+}
+
+.dd-onboard-price-val {
+  font-size: 1.625rem;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.dd-onboard-price-period {
+  font-size: 0.8125rem;
+  color: #64748b;
+  font-weight: 500;
+}
+
+.dd-onboard-plan-features {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 0.75rem;
+  color: #475569;
+  flex: 1;
+  margin-bottom: 16px;
+  padding: 0;
+}
+
+.dd-onboard-plan-features li {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+}
+
+.dd-onboard-plan-features .dd-check {
+  color: #16a34a;
+  font-size: 0.6875rem;
+  margin-top: 3px;
+  flex-shrink: 0;
+}
+
+.dd-onboard-plan-select-indicator {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-top: 12px;
+  border-top: 1px solid #e2e8f0;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: #64748b;
+}
+
+.dd-onboard-plan-card.selected .dd-onboard-plan-select-indicator {
+  color: #1e3a8a;
+  font-weight: 700;
+}
+
+/* Actions Footer */
+.dd-onboard-actions-footer {
+  display: flex;
+  justify-content: flex-end;
+  padding-top: 16px;
+  border-top: 1px solid #e2e8f0;
+}
+
+.dd-onboard-btn-primary {
+  background-color: #1e3a8a;
+  color: #ffffff;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 0.9375rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 150ms ease;
+}
+
+.dd-onboard-btn-primary:hover:not(:disabled) {
+  background-color: #1d4ed8;
+}
+
+.dd-onboard-btn-primary:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+/* =========================================================================
+   STEP 2: FORM & SYSTEM USERNAME BOX STYLES
+   ========================================================================= */
+
+.dd-onboard-alert.error {
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  color: #b91c1c;
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-size: 0.875rem;
+}
+
+.dd-onboard-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.dd-onboard-form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.dd-onboard-span-2 {
+  grid-column: 1 / -1;
+}
+
+.dd-onboard-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.dd-onboard-field label {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: #1e293b;
+}
+
+.dd-onboard-field input,
+.dd-onboard-field select {
+  width: 100%;
+  padding: 11px 14px;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  background: #ffffff;
+  color: #0f172a;
+  outline: none;
+  transition: border-color 150ms ease;
+  box-sizing: border-box;
+}
+
+.dd-onboard-field input:focus,
+.dd-onboard-field select:focus {
+  border-color: #1e3a8a;
+}
+
+/* System Auto-Generated Username Box */
+.dd-onboard-username-box {
+  background: #eff6ff;
+  border: 1.5px dashed #93c5fd;
+  border-radius: 10px;
+  padding: 14px 18px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.dd-onboard-uname-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.dd-uname-icon {
+  font-size: 1.75rem;
+  color: #1e40af;
+  flex-shrink: 0;
+}
+
+.dd-uname-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #1e40af;
+  text-transform: uppercase;
+  display: block;
+}
+
+.dd-uname-val code {
+  font-size: 1.125rem;
+  font-weight: 800;
+  color: #0f172a;
+  font-family: monospace;
+}
+
+.dd-uname-input-edit {
+  padding: 4px 8px !important;
+  font-size: 0.9375rem !important;
+  border: 1px solid #3b82f6 !important;
+  border-radius: 4px !important;
+}
+
+.dd-uname-actions {
+  display: flex;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.dd-onboard-btn-ghost-sm {
+  background: #ffffff;
+  border: 1px solid #bfdbfe;
+  color: #1e40af;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.dd-onboard-btn-ghost-sm:hover {
+  background: #dbeafe;
+}
+
+/* Password Box & Generator Button */
+.dd-onboard-pw-label-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.dd-onboard-btn-generate-pw {
+  background: transparent;
+  border: none;
+  color: #0284c7;
+  font-size: 0.75rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.dd-onboard-btn-generate-pw:hover {
+  text-decoration: underline;
+}
+
+.dd-onboard-pw-input-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.dd-pw-icon {
+  position: absolute;
+  left: 14px;
+  color: #94a3b8;
+}
+
+.dd-onboard-pw-input-wrap input {
+  padding-left: 38px !important;
+  padding-right: 42px !important;
+}
+
+.dd-onboard-pw-toggle {
+  position: absolute;
+  right: 12px;
+  background: transparent;
+  border: none;
+  color: #64748b;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+.dd-onboard-hint {
+  font-size: 0.6875rem;
+  color: #64748b;
+}
+
+/* =========================================================================
+   STEP 3: RAZORPAY CHECKOUT STYLES
+   ========================================================================= */
+
+.dd-onboard-checkout-summary {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 16px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.dd-checkout-line {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.875rem;
+}
+
+.dd-checkout-total {
+  margin-top: 6px;
+  padding-top: 10px;
+  border-top: 1px solid #e2e8f0;
+  font-size: 1.125rem;
+  font-weight: 700;
+}
+
+.dd-checkout-total-val {
+  color: #1e3a8a;
+  font-size: 1.375rem;
+  font-weight: 800;
+}
+
+.dd-onboard-razorpay-box {
+  background: #ffffff;
+  border: 1.5px solid #bfdbfe;
+  border-radius: 12px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.dd-razorpay-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.dd-razorpay-shield {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: #1e40af;
+}
+
+.dd-key-badge {
+  background: #dcfce7;
+  color: #166534;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 9999px;
+}
+
+.dd-razorpay-text {
+  font-size: 0.875rem;
+  color: #475569;
+  line-height: 1.5;
+}
+
+.dd-onboard-btn-razorpay {
+  background: #0284c7;
+  color: #ffffff;
+  border: none;
+  padding: 14px;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 150ms ease;
+}
+
+.dd-onboard-btn-razorpay:hover:not(:disabled) {
+  background: #0369a1;
+}
+
+/* =========================================================================
+   STEP 4: CONFIRMATION & CREDENTIALS DISPLAY
+   ========================================================================= */
+
+.dd-onboard-success-card {
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  border-radius: 12px;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.dd-success-icon-wrap {
+  font-size: 2.5rem;
+  color: #166534;
+  flex-shrink: 0;
+}
+
+.dd-success-text h2 {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.dd-success-text p {
+  font-size: 0.875rem;
+  color: #475569;
+  margin-top: 2px;
+}
+
+.dd-onboard-creds-display-box {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.dd-creds-box-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.dd-creds-box-header h4 {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.dd-onboard-btn-copy {
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  color: #0f172a;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.dd-onboard-btn-copy:hover {
+  background: #f1f5f9;
+}
+
+.dd-creds-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.dd-cred-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.875rem;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.dd-cred-row code {
+  font-size: 0.9375rem;
+  font-weight: 700;
+  color: #1e3a8a;
+  background: #ffffff;
+  padding: 2px 6px;
+  border-radius: 4px;
+  border: 1px solid #e2e8f0;
+}
+
+.dd-status-pill {
+  background: #dcfce7;
+  color: #166534;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 9999px;
+}
+
+.dd-btn-launch {
+  width: 100%;
+  font-size: 1.0625rem;
+  padding: 14px 28px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .dd-onboard-card {
+    padding: 20px;
+  }
+  .dd-onboard-form-grid {
+    grid-template-columns: 1fr;
+  }
+  .dd-onboard-username-box {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .dd-uname-actions {
+    width: 100%;
+    justify-content: flex-end;
+  }
+  .dd-onboard-trial-hero-card {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .dd-onboard-trial-left {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .dd-onboard-controls-bar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .dd-onboard-selectors-row {
+    width: 100%;
+    justify-content: space-between;
+  }
+  .dd-onboard-cycle-toggle {
+    width: 100%;
+  }
+  .dd-onboard-toggle-btn {
+    flex: 1;
+    justify-content: center;
+  }
+}

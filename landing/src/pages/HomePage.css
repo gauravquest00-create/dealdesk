@@ -1,0 +1,21 @@
+/* ============================================================
+   HOME PAGE - SECTION GAPS
+   ============================================================ */
+
+.home-page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.home-main {
+  display: flex;
+  flex-direction: column;
+  gap: 0px; /* 🔥 Light gap between sections */
+}
+
+/* Optional: If you want more controlled spacing between specific sections */
+.home-main > section {
+  /* Each section already has its own padding,
+     this gap adds a light separation between them */
+}

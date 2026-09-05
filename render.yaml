@@ -1,0 +1,87 @@
+# ============================================================
+# render.yaml — DealDesk Complete Deployment
+# ============================================================
+
+services:
+  # ==========================================================
+  # 1. BACKEND — Node.js API Server
+  # ==========================================================
+  - type: web
+    name: dealdesk-backend
+    runtime: node
+    repo: https://github.com/yourusername/dealdesk
+    plan: free
+    region: singapore
+    buildCommand: cd backend && npm install
+    startCommand: cd backend && npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 5000
+      - key: MONGO_URI
+        sync: false
+      - key: JWT_SECRET
+        sync: false
+      - key: RAZORPAY_KEY_ID
+        sync: false
+      - key: RAZORPAY_KEY_SECRET
+        sync: false
+      - key: CLOUDINARY_CLOUD_NAME
+        sync: false
+      - key: CLOUDINARY_API_KEY
+        sync: false
+      - key: CLOUDINARY_API_SECRET
+        sync: false
+      - key: CLIENT_URL
+        value: https://dealdesk-dashboard.onrender.com
+      - key: LANDING_URL
+        value: https://dealdesk-landing.onrender.com
+      - key: ADMIN_URL
+        value: https://dealdesk-superadmin.onrender.com
+      - key: FRONTEND_URL
+        value: https://dealdesk-dashboard.onrender.com
+
+  # ==========================================================
+  # 2. DASHBOARD — React Frontend
+  # ==========================================================
+  - type: web
+    name: dealdesk-dashboard
+    runtime: static
+    buildCommand: cd dashboard && npm install && npm run build
+    staticPublishPath: dashboard/dist
+    envVars:
+      - key: VITE_API_BASE_URL
+        value: https://dealdesk-backend.onrender.com/api
+      - key: VITE_LOGIN_URL
+        value: https://dealdesk-landing.onrender.com/login
+
+  # ==========================================================
+  # 3. LANDING — Marketing + Onboarding
+  # ==========================================================
+  - type: web
+    name: dealdesk-landing
+    runtime: static
+    buildCommand: cd landing && npm install && npm run build
+    staticPublishPath: landing/dist
+    envVars:
+      - key: VITE_API_BASE_URL
+        value: https://dealdesk-backend.onrender.com/api
+      - key: VITE_DASHBOARD_URL
+        value: https://dealdesk-dashboard.onrender.com
+
+  # ==========================================================
+  # 4. SUPERADMIN — Admin Portal
+  # ==========================================================
+  - type: web
+    name: dealdesk-superadmin
+    runtime: static
+    buildCommand: cd superadmin && npm install && npm run build
+    staticPublishPath: superadmin/dist
+    envVars:
+      - key: VITE_API_BASE_URL
+        value: https://dealdesk-backend.onrender.com/api
+      - key: VITE_LOGIN_URL
+        value: https://dealdesk-landing.onrender.com/login
+      - key: VITE_DASHBOARD_URL
+        value: https://dealdesk-dashboard.onrender.com

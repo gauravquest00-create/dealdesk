@@ -1,0 +1,166 @@
+# ============================================================
+# DEPENDENCIES
+# ============================================================
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# ============================================================
+# ENVIRONMENT VARIABLES
+# ============================================================
+.env
+.env.local
+.env.development
+.env.production
+.env.test
+.env.*.local
+*.env
+*.env.local
+
+# ============================================================
+# BUILD OUTPUTS
+# ============================================================
+dist/
+build/
+out/
+.next/
+.nuxt/
+.vite/
+*.tsbuildinfo
+
+# ============================================================
+# BACKEND (Node.js)
+# ============================================================
+/backend/node_modules/
+/backend/dist/
+/backend/build/
+/backend/.env
+/backend/coverage/
+/backend/logs/
+/backend/*.log
+/backend/*.pid
+
+# ============================================================
+# FRONTEND - DASHBOARD
+# ============================================================
+/dashboard/node_modules/
+/dashboard/dist/
+/dashboard/build/
+/dashboard/.env
+/dashboard/.env.local
+/dashboard/coverage/
+
+# ============================================================
+# FRONTEND - LANDING
+# ============================================================
+/landing/node_modules/
+/landing/dist/
+/landing/build/
+/landing/.env
+/landing/.env.local
+/landing/coverage/
+
+# ============================================================
+# FRONTEND - SUPERADMIN
+# ============================================================
+/superadmin/node_modules/
+/superadmin/dist/
+/superadmin/build/
+/superadmin/.env
+/superadmin/.env.local
+/superadmin/coverage/
+
+# ============================================================
+# DATABASE
+# ============================================================
+*.db
+*.sqlite
+*.sqlite3
+/data/
+/temp/
+
+# ============================================================
+# IDE & EDITOR FILES
+# ============================================================
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+.vscode/*
+!.vscode/extensions.json
+.idea/*
+*.iml
+
+# ============================================================
+# OS FILES
+# ============================================================
+.DS_Store
+Thumbs.db
+desktop.ini
+*.tmp
+*.temp
+
+# ============================================================
+# LOGS
+# ============================================================
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+.pnpm-debug.log*
+
+# ============================================================
+# MISC
+# ============================================================
+*.pem
+*.key
+*.crt
+*.p12
+*.pfx
+.secrets/
+*.secret
+*.secrets
+.env.*
+!.env.example
+!.env.sample
+
+# ============================================================
+# TEST COVERAGE
+# ============================================================
+coverage/
+.nyc_output/
+*.lcov
+*.cov
+
+# ============================================================
+# TEMPORARY FILES
+# ============================================================
+.tmp/
+.temp/
+.cache/
+*.cache
+*.tmp
+*.temp
+
+# ============================================================
+# DEPLOYMENT
+# ============================================================
+.DS_Store
+.vercel/
+.netlify/
+.railway/
+.render/

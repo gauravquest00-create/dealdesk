@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 160" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e3a8a"/>
+      <stop offset="100%" stop-color="#0b1120"/>
+    </linearGradient>
+    <linearGradient id="d1Grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#60a5fa"/>
+      <stop offset="100%" stop-color="#2563eb"/>
+    </linearGradient>
+    <linearGradient id="d2Grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38bdf8"/>
+      <stop offset="100%" stop-color="#0284c7"/>
+    </linearGradient>
+  </defs>
+
+  <!-- DD Icon Mark (Left) -->
+  <g transform="translate(10, 10)">
+    <rect x="0" y="0" width="140" height="140" rx="36" fill="url(#bgGrad)"/>
+    <rect x="0" y="0" width="140" height="140" rx="36" fill="none" stroke="#60a5fa" stroke-width="2" stroke-opacity="0.3"/>
+    
+    <!-- Left D -->
+    <path d="M 32 38 L 62 38 C 84 38 100 52 100 70 C 100 88 84 102 62 102 L 32 102 Z M 48 54 L 60 54 C 72 54 82 61 82 70 C 82 79 72 86 60 86 L 48 86 Z" fill="url(#d1Grad)" opacity="0.95"/>
+    
+    <!-- Right D -->
+    <path d="M 64 38 L 92 38 C 114 38 126 52 126 70 C 126 88 114 102 92 102 L 64 102 Z M 80 54 L 90 54 C 102 54 108 61 108 70 C 108 79 102 86 90 86 L 80 86 Z" fill="url(#d2Grad)"/>
+
+    <circle cx="116" cy="38" r="6" fill="#38bdf8"/>
+  </g>
+
+  <!-- DealDesk Typography (Right) -->
+  <g transform="translate(175, 45)">
+    <text x="0" y="46" font-family="-apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', Roboto, sans-serif" font-size="52" font-weight="900" fill="#0f172a" letter-spacing="-1.5">
+      Deal<tspan fill="#2563eb">Desk</tspan>
+    </text>
+    <rect x="2" y="62" width="220" height="24" rx="6" fill="#eff6ff"/>
+    <text x="14" y="79" font-family="-apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="800" fill="#1e40af" letter-spacing="3.5">
+      SMART DEAL WORKSPACE
+    </text>
+  </g>
+</svg>

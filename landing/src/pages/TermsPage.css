@@ -1,0 +1,243 @@
+/* ============================================================
+   TERMS PAGE - PRODUCTION READY
+   ============================================================ */
+
+.terms-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: #f8fafc;
+}
+
+.terms-main {
+  flex: 1;
+  padding: 40px 20px 60px 20px;
+}
+
+.terms-container {
+  max-width: 860px;
+  margin: 0 auto;
+}
+
+/* ============================================================
+   BACK BUTTON
+   ============================================================ */
+.terms-back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: transparent;
+  border: none;
+  color: #64748b;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 8px 0 16px 0;
+  transition: color 0.2s ease;
+}
+
+.terms-back-btn:hover {
+  color: #1e3a8a;
+}
+
+/* ============================================================
+   TERMS CARD
+   ============================================================ */
+.terms-card {
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.04);
+  padding: 40px 48px;
+  border: 1px solid #e2e8f0;
+}
+
+/* Header */
+.terms-header {
+  margin-bottom: 24px;
+}
+
+.terms-header h1 {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0 0 4px 0;
+}
+
+.terms-updated {
+  font-size: 0.875rem;
+  color: #94a3b8;
+  margin: 0 0 12px 0;
+}
+
+.terms-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #1e40af;
+  background: #dbeafe;
+  padding: 4px 12px;
+  border-radius: 9999px;
+}
+
+/* Divider */
+.terms-divider {
+  height: 1px;
+  background: #e2e8f0;
+  margin-bottom: 28px;
+}
+
+/* Body */
+.terms-body {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.terms-section {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+.terms-section-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 9999px;
+  background: #eff6ff;
+  color: #2563eb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9375rem;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.terms-section h3 {
+  font-size: 1.0625rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0 0 6px 0;
+}
+
+.terms-section p {
+  font-size: 0.9375rem;
+  color: #475569;
+  line-height: 1.8;
+  margin: 0;
+}
+
+/* Footer */
+.terms-footer {
+  margin-top: 32px;
+  padding-top: 24px;
+  border-top: 1px solid #e2e8f0;
+  text-align: center;
+}
+
+.terms-footer p {
+  font-size: 0.875rem;
+  color: #64748b;
+  margin: 0 0 16px 0;
+  line-height: 1.6;
+}
+
+.terms-cta-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: linear-gradient(135deg, #1e3a8a, #2563eb);
+  color: #ffffff;
+  padding: 12px 32px;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.9375rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 16px rgba(37, 99, 235, 0.25);
+}
+
+.terms-cta-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px rgba(37, 99, 235, 0.35);
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+
+@media (max-width: 768px) {
+  .terms-main {
+    padding: 20px 16px 40px 16px;
+  }
+
+  .terms-card {
+    padding: 24px 20px;
+  }
+
+  .terms-header h1 {
+    font-size: 1.5rem;
+  }
+
+  .terms-section {
+    gap: 12px;
+  }
+
+  .terms-section-icon {
+    width: 30px;
+    height: 30px;
+    font-size: 0.8125rem;
+  }
+
+  .terms-section h3 {
+    font-size: 0.9375rem;
+  }
+
+  .terms-section p {
+    font-size: 0.875rem;
+  }
+
+  .terms-footer p {
+    font-size: 0.8125rem;
+  }
+
+  .terms-cta-btn {
+    width: 100%;
+    padding: 12px 20px;
+    font-size: 0.875rem;
+  }
+
+  .terms-back-btn {
+    font-size: 0.8125rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .terms-card {
+    padding: 18px 16px;
+  }
+
+  .terms-header h1 {
+    font-size: 1.25rem;
+  }
+
+  .terms-section {
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .terms-section-icon {
+    width: 28px;
+    height: 28px;
+    font-size: 0.75rem;
+  }
+
+  .terms-cta-btn {
+    font-size: 0.8125rem;
+    padding: 10px 16px;
+  }
+}

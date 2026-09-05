@@ -1,0 +1,386 @@
+/* ============================================================
+   HOW IT WORKS SECTION - NEW UI/UX
+   ============================================================ */
+
+.how-section {
+  padding: var(--space-12) var(--space-4) var(--space-10);
+  background: linear-gradient(180deg, #f1f5f9 0%, #f8fafc 40%, #ffffff 100%);
+  position: relative;
+  overflow: hidden;
+  padding: 10px;
+}
+
+/* Background Shapes */
+.how-bg-shape {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  filter: blur(60px);
+  opacity: 0.3;
+  z-index: 0;
+}
+
+.shape-1 {
+  width: 300px;
+  height: 300px;
+  top: -50px;
+  left: -80px;
+  background: rgba(37, 99, 235, 0.06);
+}
+
+.shape-2 {
+  width: 400px;
+  height: 400px;
+  bottom: -100px;
+  right: -100px;
+  background: rgba(124, 58, 237, 0.05);
+}
+
+.how-container {
+  max-width: 1280px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+
+/* ============================================================
+   SECTION HEADER
+   ============================================================ */
+.section-header {
+  text-align: center;
+  max-width: 720px;
+  margin: 0 auto var(--space-8);
+}
+
+.section-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--color-accent, #2563eb);
+  letter-spacing: 0.06em;
+  background: rgba(37, 99, 235, 0.06);
+  padding: 6px 16px;
+  border-radius: 9999px;
+  margin-bottom: var(--space-3);
+}
+
+.kicker-line {
+  width: 20px;
+  height: 2px;
+  background: var(--color-accent, #2563eb);
+  border-radius: 2px;
+}
+
+.section-title {
+  font-size: clamp(1.75rem, 3.5vw, 2.5rem);
+  font-weight: 700;
+  color: var(--color-text-main, #0f172a);
+  margin: var(--space-2) 0 var(--space-3);
+}
+
+.title-highlight {
+  background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.section-subtitle {
+  font-size: 1rem;
+  color: var(--color-text-muted, #64748b);
+  line-height: 1.7;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* ============================================================
+   STEPS FLOW
+   ============================================================ */
+.steps-flow {
+  position: relative;
+  padding: var(--space-4) 0;
+}
+
+/* Connector Line (hidden on mobile) */
+.steps-connector {
+  position: absolute;
+  top: 50%;
+  left: 10%;
+  right: 10%;
+  height: 2px;
+  background: linear-gradient(90deg, #2563eb, #7c3aed, #059669, #d97706);
+  opacity: 0.2;
+  transform: translateY(-50%);
+  z-index: 0;
+}
+
+.steps-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-5);
+  position: relative;
+  z-index: 1;
+}
+
+/* Step Card */
+.step-card {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: all 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+  background: var(--color-surface, #ffffff);
+  border: 1px solid var(--color-border, #e2e8f0);
+  border-radius: var(--radius-md, 12px);
+  padding: var(--space-5);
+  text-align: center;
+  position: relative;
+}
+
+.step-card.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.step-card:hover {
+  transform: translateY(-6px);
+  border-color: var(--color-primary, #2563eb);
+  box-shadow: 0 12px 40px rgba(37, 99, 235, 0.08);
+}
+
+/* Step Number - Circular Badge */
+.step-number {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto var(--space-3);
+  font-size: 1rem;
+  font-weight: 800;
+  color: #ffffff;
+  transition: transform 0.3s ease;
+}
+
+.step-card:hover .step-number {
+  transform: scale(1.1);
+}
+
+/* Icon */
+.step-icon-wrapper {
+  font-size: 2rem;
+  margin-bottom: var(--space-3);
+  transition: transform 0.3s ease;
+}
+
+.step-card:hover .step-icon-wrapper {
+  transform: scale(1.05);
+}
+
+/* Title & Description */
+.step-title {
+  font-size: 1.0625rem;
+  font-weight: 700;
+  color: var(--color-text-main, #0f172a);
+  margin-bottom: var(--space-2);
+  line-height: 1.3;
+}
+
+.step-desc {
+  font-size: 0.875rem;
+  color: var(--color-text-muted, #64748b);
+  line-height: 1.7;
+  margin-bottom: var(--space-3);
+}
+
+/* Highlight Tag */
+.step-highlight {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  color: #ffffff;
+  padding: 4px 12px;
+  border-radius: 9999px;
+  transition: transform 0.3s ease;
+}
+
+.step-highlight-icon {
+  font-size: 0.625rem;
+}
+
+.step-card:hover .step-highlight {
+  transform: scale(1.03);
+}
+
+/* Arrow between steps */
+.step-arrow {
+  display: none;
+}
+
+/* ============================================================
+   BOTTOM CTA
+   ============================================================ */
+.how-cta {
+  margin-top: var(--space-8);
+}
+
+.how-cta-inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-4);
+  padding: var(--space-5) var(--space-6);
+  background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
+  border-radius: 16px;
+  color: #ffffff;
+  flex-wrap: wrap;
+}
+
+.how-cta-text {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.how-cta-icon {
+  font-size: 2rem;
+  opacity: 0.8;
+}
+
+.how-cta-text h4 {
+  font-size: 1.0625rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.how-cta-text p {
+  font-size: 0.875rem;
+  opacity: 0.8;
+  margin: 0;
+}
+
+.how-cta-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #ffffff;
+  color: #1e3a8a;
+  padding: 12px 28px;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 0.9375rem;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  white-space: nowrap;
+}
+
+.how-cta-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  gap: 12px;
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width: 1024px) {
+  .steps-row {
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-4);
+  }
+
+  .steps-connector {
+    display: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .how-section {
+    padding: var(--space-8) var(--space-3) var(--space-6);
+  }
+
+  .section-title {
+    font-size: clamp(1.5rem, 4vw, 2rem);
+  }
+
+  .steps-row {
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-3);
+  }
+
+  .step-card {
+    padding: var(--space-4);
+  }
+
+  .step-icon-wrapper {
+    font-size: 1.5rem;
+  }
+
+  .step-number {
+    width: 34px;
+    height: 34px;
+    font-size: 0.875rem;
+  }
+
+  .step-title {
+    font-size: 0.9375rem;
+  }
+
+  .step-desc {
+    font-size: 0.8125rem;
+  }
+
+  .how-cta-inner {
+    flex-direction: column;
+    text-align: center;
+    padding: var(--space-4);
+  }
+
+  .how-cta-text {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .how-cta-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .shape-1,
+  .shape-2 {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .steps-row {
+    grid-template-columns: 1fr;
+    gap: var(--space-3);
+  }
+
+  .step-card {
+    max-width: 100%;
+  }
+
+  .step-arrow {
+    display: none;
+  }
+
+  .how-cta-text h4 {
+    font-size: 0.9375rem;
+  }
+
+  .how-cta-text p {
+    font-size: 0.8125rem;
+  }
+
+  .section-kicker {
+    font-size: 0.75rem;
+    padding: 4px 12px;
+  }
+}

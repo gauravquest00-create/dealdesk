@@ -1,0 +1,100 @@
+.sa-login-viewport {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #0b0f19;
+  padding: 16px;
+}
+
+.sa-login-card {
+  width: 100%;
+  max-width: 420px;
+  background: #111827;
+  border: 1px solid #1f2937;
+  border-radius: 12px;
+  padding: 36px 32px;
+  color: #fff;
+  text-align: center;
+}
+
+.sa-logo-badge {
+  width: 52px;
+  height: 52px;
+  background: #3b82f6;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  margin: 0 auto 16px;
+}
+
+.sa-login-card h2 {
+  font-size: 1.375rem;
+  margin-bottom: 4px;
+}
+
+.sa-login-card .sub {
+  font-size: 0.8125rem;
+  color: #9ca3af;
+  margin-bottom: 24px;
+}
+
+.error-box {
+  background: #7f1d1d;
+  color: #fecaca;
+  padding: 10px;
+  border-radius: 6px;
+  font-size: 0.8125rem;
+  margin-bottom: 16px;
+}
+
+.sa-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  text-align: left;
+}
+
+.form-group label {
+  font-size: 0.8125rem;
+  color: #cbd5e1;
+  font-weight: 500;
+  display: block;
+  margin-bottom: 6px;
+}
+
+.input-icon-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input-icon-wrap svg {
+  position: absolute;
+  left: 12px;
+  color: #64748b;
+}
+
+.input-icon-wrap input {
+  width: 100%;
+  padding: 10px 12px 10px 36px;
+  background: #1f2937;
+  border: 1px solid #374151;
+  border-radius: 6px;
+  color: #fff;
+  font-size: 0.875rem;
+  outline: none;
+}
+
+.btn-sa-submit {
+  background: #3b82f6;
+  color: #fff;
+  border: none;
+  padding: 12px;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 8px;
+}

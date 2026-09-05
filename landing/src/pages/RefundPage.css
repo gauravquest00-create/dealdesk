@@ -1,0 +1,243 @@
+/* ============================================================
+   REFUND PAGE - PRODUCTION READY
+   ============================================================ */
+
+.refund-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: #f8fafc;
+}
+
+.refund-main {
+  flex: 1;
+  padding: 40px 20px 60px 20px;
+}
+
+.refund-container {
+  max-width: 860px;
+  margin: 0 auto;
+}
+
+/* ============================================================
+   BACK BUTTON
+   ============================================================ */
+.refund-back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: transparent;
+  border: none;
+  color: #64748b;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 8px 0 16px 0;
+  transition: color 0.2s ease;
+}
+
+.refund-back-btn:hover {
+  color: #1e3a8a;
+}
+
+/* ============================================================
+   REFUND CARD
+   ============================================================ */
+.refund-card {
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.04);
+  padding: 40px 48px;
+  border: 1px solid #e2e8f0;
+}
+
+/* Header */
+.refund-header {
+  margin-bottom: 24px;
+}
+
+.refund-header h1 {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0 0 4px 0;
+}
+
+.refund-updated {
+  font-size: 0.875rem;
+  color: #94a3b8;
+  margin: 0 0 12px 0;
+}
+
+.refund-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #1e40af;
+  background: #dbeafe;
+  padding: 4px 12px;
+  border-radius: 9999px;
+}
+
+/* Divider */
+.refund-divider {
+  height: 1px;
+  background: #e2e8f0;
+  margin-bottom: 28px;
+}
+
+/* Body */
+.refund-body {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.refund-section {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+.refund-section-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 9999px;
+  background: #eff6ff;
+  color: #2563eb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9375rem;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.refund-section h3 {
+  font-size: 1.0625rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0 0 6px 0;
+}
+
+.refund-section p {
+  font-size: 0.9375rem;
+  color: #475569;
+  line-height: 1.8;
+  margin: 0;
+}
+
+/* Footer */
+.refund-footer {
+  margin-top: 32px;
+  padding-top: 24px;
+  border-top: 1px solid #e2e8f0;
+  text-align: center;
+}
+
+.refund-footer p {
+  font-size: 0.875rem;
+  color: #64748b;
+  margin: 0 0 16px 0;
+  line-height: 1.6;
+}
+
+.refund-cta-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: linear-gradient(135deg, #1e3a8a, #2563eb);
+  color: #ffffff;
+  padding: 12px 32px;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.9375rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 16px rgba(37, 99, 235, 0.25);
+}
+
+.refund-cta-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px rgba(37, 99, 235, 0.35);
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+
+@media (max-width: 768px) {
+  .refund-main {
+    padding: 20px 16px 40px 16px;
+  }
+
+  .refund-card {
+    padding: 24px 20px;
+  }
+
+  .refund-header h1 {
+    font-size: 1.5rem;
+  }
+
+  .refund-section {
+    gap: 12px;
+  }
+
+  .refund-section-icon {
+    width: 30px;
+    height: 30px;
+    font-size: 0.8125rem;
+  }
+
+  .refund-section h3 {
+    font-size: 0.9375rem;
+  }
+
+  .refund-section p {
+    font-size: 0.875rem;
+  }
+
+  .refund-footer p {
+    font-size: 0.8125rem;
+  }
+
+  .refund-cta-btn {
+    width: 100%;
+    padding: 12px 20px;
+    font-size: 0.875rem;
+  }
+
+  .refund-back-btn {
+    font-size: 0.8125rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .refund-card {
+    padding: 18px 16px;
+  }
+
+  .refund-header h1 {
+    font-size: 1.25rem;
+  }
+
+  .refund-section {
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .refund-section-icon {
+    width: 28px;
+    height: 28px;
+    font-size: 0.75rem;
+  }
+
+  .refund-cta-btn {
+    font-size: 0.8125rem;
+    padding: 10px 16px;
+  }
+}
