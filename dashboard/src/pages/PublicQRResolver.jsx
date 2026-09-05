@@ -3,6 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 import { qrApi } from '../services/api/services.js';
 import { useLanguage } from '../context/LanguageContext.jsx';
 import { useCurrency } from '../context/CurrencyContext.jsx';
+import { DealDeskLogo } from '../components/DealDeskLogo.jsx';
 import {
   FaBuilding,
   FaBed,
@@ -19,15 +20,13 @@ import {
   FaTimes,
   FaCompass,
   FaCouch,
-  FaShareAlt,
   FaGlobe,
   FaLanguage,
   FaUser,
-  FaCalendar
+  FaMoneyBillWave
 } from 'react-icons/fa';
 import './PublicQRResolver.css';
 
-// Translation object with all keys used in page
 const translations = {
   en: {
     smartQrTag: 'Smart QR:',
@@ -42,26 +41,23 @@ const translations = {
     scheduleTour: 'Schedule Private Tour',
     scheduleDesc: 'Connect directly with the advisor for private viewings.',
     enquiryReceived: 'Enquiry Received! 🎉',
-    enquirySuccessMsg: 'Thank you, {name}. Your private viewing inquiry for {property} has been logged directly with {advisor}.',
-    advisorFollowup: 'Our advisor will contact you on {phone} shortly to confirm your viewing schedule.',
+    enquirySuccessMsg: 'Thank you, {name}. Your enquiry for {property} has been logged directly with {advisor}.',
+    advisorFollowup: 'Our advisor will contact you on {phone} shortly.',
     continueWhatsApp: 'Continue to WhatsApp Chat',
     close: 'Close',
     yourName: 'Your Full Name *',
     phoneNumber: 'Phone Number (WhatsApp Ready) *',
     emailAddress: 'Email Address',
-    preferredDate: 'Preferred Viewing Date',
-    preferredTime: 'Preferred Time',
-    questions: 'Questions / Specific Requirements (Optional)',
+    budget: 'Preferred Budget Range',
     cancel: 'Cancel',
-    confirmRequest: 'Confirm & Request Viewing',
-    submitting: 'Submitting Enquiry...',
+    confirmRequest: 'Submit Enquiry',
+    submitting: 'Submitting...',
     listingNotFound: 'Listing Not Found',
     listingNotFoundDesc: 'Smart QR code {qrId} is currently not mapped to an active property.',
     visitHome: 'Visit DealDesk Home',
     connecting: 'Connecting to property listing...',
     aboutResidence: 'About this Residence',
     keyFeatures: 'Key Features & Amenities',
-    propertyType: 'Property Type',
     negotiable: 'Negotiable',
     beds: 'Beds',
     baths: 'Baths',
@@ -69,7 +65,6 @@ const translations = {
     facing: 'Facing',
     furnishing: 'Furnishing',
     floorLevel: 'Floor Level',
-    floor: 'Floor',
     verifiedListing: 'Verified Listing on DealDesk.',
   },
   hi: {
@@ -85,26 +80,23 @@ const translations = {
     scheduleTour: 'निजी दौरा शेड्यूल करें',
     scheduleDesc: 'निजी दर्शन के लिए सलाहकार से सीधे संपर्क करें।',
     enquiryReceived: 'जांच प्राप्त हुई! 🎉',
-    enquirySuccessMsg: 'धन्यवाद, {name}। {property} के लिए आपकी निजी दर्शन जांच {advisor} के साथ दर्ज कर ली गई है।',
-    advisorFollowup: 'हमारा सलाहकार आपके दर्शन कार्यक्रम की पुष्टि करने के लिए {phone} पर जल्द ही संपर्क करेगा।',
+    enquirySuccessMsg: 'धन्यवाद, {name}। {property} के लिए आपकी जांच {advisor} के साथ दर्ज कर ली गई है।',
+    advisorFollowup: 'हमारा सलाहकार आपसे {phone} पर जल्द ही संपर्क करेगा।',
     continueWhatsApp: 'व्हाट्सएप चैट पर जारी रखें',
     close: 'बंद करें',
     yourName: 'आपका पूरा नाम *',
     phoneNumber: 'फोन नंबर (व्हाट्सएप) *',
     emailAddress: 'ईमेल पता',
-    preferredDate: 'पसंदीदा दर्शन तिथि',
-    preferredTime: 'पसंदीदा समय',
-    questions: 'प्रश्न / विशेष आवश्यकताएं (वैकल्पिक)',
+    budget: 'पसंदीदा बजट रेंज',
     cancel: 'रद्द करें',
-    confirmRequest: 'पुष्टि करें और दर्शन का अनुरोध करें',
-    submitting: 'जांच सबमिट हो रही है...',
+    confirmRequest: 'जांच सबमिट करें',
+    submitting: 'सबमिट हो रहा है...',
     listingNotFound: 'लिस्टिंग नहीं मिली',
     listingNotFoundDesc: 'स्मार्ट QR कोड {qrId} वर्तमान में किसी सक्रिय संपत्ति से मैप नहीं है।',
     visitHome: 'DealDesk होम पर जाएं',
     connecting: 'संपत्ति लिस्टिंग से कनेक्ट हो रहा है...',
     aboutResidence: 'इस निवास के बारे में',
     keyFeatures: 'प्रमुख विशेषताएं और सुविधाएं',
-    propertyType: 'संपत्ति का प्रकार',
     negotiable: 'परक्राम्य',
     beds: 'बेडरूम',
     baths: 'बाथरूम',
@@ -112,7 +104,6 @@ const translations = {
     facing: 'दिशा',
     furnishing: 'फर्नीशिंग',
     floorLevel: 'मंजिल स्तर',
-    floor: 'मंजिल',
     verifiedListing: 'DealDesk पर सत्यापित लिस्टिंग।',
   },
   ar: {
@@ -128,26 +119,23 @@ const translations = {
     scheduleTour: 'جدولة جولة خاصة',
     scheduleDesc: 'تواصل مباشرة مع المستشار للجولات الخاصة.',
     enquiryReceived: 'تم استلام الاستفسار! 🎉',
-    enquirySuccessMsg: 'شكراً لك، {name}. تم تسجيل استفسارك للجولة الخاصة لـ {property} مباشرة مع {advisor}.',
-    advisorFollowup: 'سيتصل بك مستشارنا على {phone} قريباً لتأكيد جدول الجولة.',
+    enquirySuccessMsg: 'شكراً لك، {name}. تم تسجيل استفسارك لـ {property} مباشرة مع {advisor}.',
+    advisorFollowup: 'سيتصل بك مستشارنا على {phone} قريباً.',
     continueWhatsApp: 'مواصلة الدردشة عبر واتساب',
     close: 'إغلاق',
     yourName: 'الاسم الكامل *',
     phoneNumber: 'رقم الهاتف (واتساب) *',
     emailAddress: 'البريد الإلكتروني',
-    preferredDate: 'التاريخ المفضل للجولة',
-    preferredTime: 'الوقت المفضل',
-    questions: 'أسئلة / متطلبات خاصة (اختياري)',
+    budget: 'نطاق الميزانية المفضل',
     cancel: 'إلغاء',
-    confirmRequest: 'تأكيد وطلب جولة',
-    submitting: 'جاري إرسال الاستفسار...',
+    confirmRequest: 'إرسال الاستفسار',
+    submitting: 'جاري الإرسال...',
     listingNotFound: 'القائمة غير موجودة',
     listingNotFoundDesc: 'رمز QR الذكي {qrId} غير مرتبط حالياً بأي عقار نشط.',
     visitHome: 'زيارة الصفحة الرئيسية',
     connecting: 'جارٍ الاتصال بقائمة العقار...',
     aboutResidence: 'حول هذا المسكن',
     keyFeatures: 'الميزات الرئيسية والمرافق',
-    propertyType: 'نوع العقار',
     negotiable: 'قابل للتفاوض',
     beds: 'غرف نوم',
     baths: 'حمامات',
@@ -155,10 +143,19 @@ const translations = {
     facing: 'اتجاه',
     furnishing: 'التأثيث',
     floorLevel: 'مستوى الطابق',
-    floor: 'طابق',
     verifiedListing: 'قائمة تم التحقق منها على DealDesk.',
   },
 };
+
+const BUDGET_OPTIONS = [
+  { value: 'under-50k', label: 'Under $50K' },
+  { value: '50k-100k', label: '$50K - $100K' },
+  { value: '100k-200k', label: '$100K - $200K' },
+  { value: '200k-500k', label: '$200K - $500K' },
+  { value: '500k-1m', label: '$500K - $1M' },
+  { value: '1m-2m', label: '$1M - $2M' },
+  { value: 'above-2m', label: 'Above $2M' },
+];
 
 export const PublicQRResolver = () => {
   const { qrId } = useParams();
@@ -174,9 +171,7 @@ export const PublicQRResolver = () => {
     name: '',
     phone: '',
     email: '',
-    preferredDate: new Date(Date.now() + 86400000).toISOString().split('T')[0],
-    preferredTime: '15:00',
-    message: '',
+    budget: '',
   });
 
   const t = translations[language] || translations.en;
@@ -198,17 +193,18 @@ export const PublicQRResolver = () => {
     setSubmitting(true);
     try {
       const activeProp = data?.isSoldFallback ? data?.replacementProperty : data?.property;
+      
+      // 🔥 CRITICAL: Use 'Smart QR' — matches backend LEAD_SOURCE.SMART_QR
       const res = await qrApi.submitEnquiry({
         qrId,
         propertyId: activeProp?._id,
         name: formData.name,
         phone: formData.phone,
         email: formData.email,
-        preferredDate: formData.preferredDate,
-        preferredTime: formData.preferredTime,
-        message: formData.message,
+        budget: formData.budget,
+        source: 'Smart QR', // ✅ CORRECT — valid enum value
       });
-
+      
       setEnquirySuccess(res.data);
     } catch (err) {
       alert(err.message || 'Failed to submit enquiry. Please try calling the advisor directly.');
@@ -217,7 +213,6 @@ export const PublicQRResolver = () => {
     }
   };
 
-  // Language and currency options
   const languageOptions = [
     { code: 'en', label: 'English' },
     { code: 'hi', label: 'हिन्दी' },
@@ -231,6 +226,12 @@ export const PublicQRResolver = () => {
     { code: 'GBP', label: 'GBP £' },
     { code: 'EUR', label: 'EUR €' },
   ];
+
+  const resetForm = () => {
+    setFormData({ name: '', phone: '', email: '', budget: '' });
+    setEnquirySuccess(null);
+    setShowEnquiryModal(false);
+  };
 
   if (loading) {
     return (
@@ -264,12 +265,11 @@ export const PublicQRResolver = () => {
 
   return (
     <div className="public-qr-page">
-      {/* Brand Header with Language & Currency Selector */}
+      {/* Header */}
       <header className="public-qr-header">
         <div className="header-container">
           <div className="brand-logo-wrap">
-            <FaBuilding />
-            <span>{agencyName}</span>
+            <DealDeskLogo size="sm" theme="dark" />
           </div>
           <div className="header-controls">
             <div className="lang-currency-selectors">
@@ -304,21 +304,18 @@ export const PublicQRResolver = () => {
       </header>
 
       <main className="public-qr-main">
-        {/* Replacement Inventory Notice if Original Property Sold */}
         {data.isSoldFallback && (
           <div className="sold-notice-banner">
             <FaExclamationTriangle className="alert-icon" />
             <div>
               <strong>{t.soldNotice}</strong>
-              <p>
-                {t.soldNoticeDesc} <strong>{prop?.projectName}</strong>.
-              </p>
+              <p>{t.soldNoticeDesc} <strong>{prop?.projectName}</strong>.</p>
             </div>
           </div>
         )}
 
         <div className="public-property-card">
-          {/* Main Cover Image */}
+          {/* Image */}
           <div className="property-hero-image-wrap">
             <img 
               src={prop?.photos?.[0]?.url || 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80'} 
@@ -331,7 +328,7 @@ export const PublicQRResolver = () => {
           </div>
 
           <div className="property-content-body">
-            {/* Title & Price Header */}
+            {/* Header */}
             <div className="property-header-row">
               <div>
                 <span className="property-type-tag">{prop?.propertyType || 'Apartment'} • {prop?.configuration}</span>
@@ -344,7 +341,7 @@ export const PublicQRResolver = () => {
               </div>
             </div>
 
-            {/* Space Specs Matrix */}
+            {/* Specs */}
             <div className="specs-matrix-grid">
               <div className="spec-tile">
                 <FaBed className="spec-icon" />
@@ -398,7 +395,7 @@ export const PublicQRResolver = () => {
               </div>
             )}
 
-            {/* Amenities Pills */}
+            {/* Amenities */}
             {prop?.amenities && prop.amenities.length > 0 && (
               <div className="amenities-section">
                 <h3>{t.keyFeatures}</h3>
@@ -412,7 +409,7 @@ export const PublicQRResolver = () => {
               </div>
             )}
 
-            {/* Advisor Contact Card */}
+            {/* Advisor Card */}
             <div className="advisor-contact-card">
               <div className="advisor-intro-header">
                 <h3>{t.connectTitle}</h3>
@@ -450,7 +447,6 @@ export const PublicQRResolver = () => {
                 </a>
               </div>
 
-              {/* Primary CTA — Box-style like social link preview */}
               <button 
                 className="btn-primary-interest box-style-btn"
                 onClick={() => {
@@ -466,7 +462,7 @@ export const PublicQRResolver = () => {
         </div>
       </main>
 
-      {/* Enquiry Modal — Box-style form */}
+      {/* Enquiry Modal */}
       {showEnquiryModal && (
         <div className="modal-backdrop" onClick={() => setShowEnquiryModal(false)}>
           <div className="enquiry-modal-card box-style" onClick={(e) => e.stopPropagation()}>
@@ -506,8 +502,11 @@ export const PublicQRResolver = () => {
                   >
                     <FaWhatsapp /> {t.continueWhatsApp}
                   </a>
-                  <button className="btn-finish" onClick={() => setShowEnquiryModal(false)}>
+                  <button className="btn-finish" onClick={resetForm}>
                     {t.close}
+                  </button>
+                  <button className="btn-finish btn-submit-another" onClick={resetForm}>
+                    Submit Another Enquiry
                   </button>
                 </div>
               </div>
@@ -545,33 +544,17 @@ export const PublicQRResolver = () => {
                   />
                 </div>
 
-                <div className="form-row-2">
-                  <div className="form-field">
-                    <label><FaCalendar className="form-icon" /> {t.preferredDate}</label>
-                    <input 
-                      type="date" 
-                      value={formData.preferredDate} 
-                      onChange={e => setFormData({ ...formData, preferredDate: e.target.value })} 
-                    />
-                  </div>
-                  <div className="form-field">
-                    <label><FaClock className="form-icon" /> {t.preferredTime}</label>
-                    <input 
-                      type="time" 
-                      value={formData.preferredTime} 
-                      onChange={e => setFormData({ ...formData, preferredTime: e.target.value })} 
-                    />
-                  </div>
-                </div>
-
                 <div className="form-field">
-                  <label>{t.questions}</label>
-                  <textarea 
-                    rows={3} 
-                    placeholder="Interested in price negotiation, floor plan details, or mortgage options..." 
-                    value={formData.message} 
-                    onChange={e => setFormData({ ...formData, message: e.target.value })} 
-                  />
+                  <label><FaMoneyBillWave className="form-icon" /> {t.budget}</label>
+                  <select 
+                    value={formData.budget} 
+                    onChange={e => setFormData({ ...formData, budget: e.target.value })}
+                  >
+                    <option value="">Select budget range</option>
+                    {BUDGET_OPTIONS.map(opt => (
+                      <option key={opt.value} value={opt.value}>{opt.label}</option>
+                    ))}
+                  </select>
                 </div>
 
                 <div className="modal-footer-row">
