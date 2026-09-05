@@ -1,11 +1,9 @@
 /* ============================================================
-   PUBLIC QR RESOLVER - COMPLETE CSS
-   Smart QR Public Landing Page
+   PUBLIC QR RESOLVER - PRODUCTION READY
+   Mobile-first, responsive, clean UI/UX
    ============================================================ */
 
-/* ============================================================
-   RESET & BASE
-   ============================================================ */
+/* Reset & Base */
 .public-qr-page {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   background: #f8fafc;
@@ -15,6 +13,7 @@
   color: #0f172a;
   margin: 0;
   padding: 0;
+  width: 100%;
 }
 
 * {
@@ -22,7 +21,7 @@
 }
 
 /* ============================================================
-   LOADING & ERROR SCREENS
+   LOADING & ERROR
    ============================================================ */
 .public-qr-loading-screen,
 .public-qr-error-screen {
@@ -75,13 +74,6 @@
   margin: 0 auto 20px;
 }
 
-.public-qr-error-screen code {
-  background: #f1f5f9;
-  padding: 2px 6px;
-  border-radius: 4px;
-  font-size: 0.875rem;
-}
-
 .btn-return-home {
   display: inline-block;
   background: #2563eb;
@@ -102,7 +94,7 @@
    ============================================================ */
 .public-qr-header {
   background: #0f172a;
-  padding: 12px 20px;
+  padding: 10px 16px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.06);
   flex-shrink: 0;
 }
@@ -114,34 +106,25 @@
   justify-content: space-between;
   align-items: center;
   flex-wrap: wrap;
-  gap: 12px;
+  gap: 8px;
 }
 
 .brand-logo-wrap {
   display: flex;
   align-items: center;
-  gap: 8px;
-  color: #ffffff;
-  font-size: 1.0625rem;
-  font-weight: 700;
-}
-
-.brand-logo-wrap svg {
-  font-size: 1.25rem;
-  color: #2563eb;
 }
 
 .header-controls {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 10px;
   flex-wrap: wrap;
 }
 
 .lang-currency-selectors {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
 }
 
 .selector-group {
@@ -149,7 +132,7 @@
   align-items: center;
   gap: 4px;
   background: rgba(255, 255, 255, 0.08);
-  padding: 4px 10px;
+  padding: 2px 8px;
   border-radius: 6px;
 }
 
@@ -168,7 +151,7 @@
   outline: none;
   cursor: pointer;
   padding: 2px 0;
-  min-width: 60px;
+  min-width: 50px;
 }
 
 .lang-select option,
@@ -179,10 +162,10 @@
 
 .smart-qr-tag {
   color: rgba(255, 255, 255, 0.6);
-  font-size: 0.75rem;
+  font-size: 0.7rem;
   font-weight: 600;
   background: rgba(255, 255, 255, 0.06);
-  padding: 4px 12px;
+  padding: 2px 10px;
   border-radius: 9999px;
 }
 
@@ -194,36 +177,36 @@
   max-width: 1200px;
   width: 100%;
   margin: 0 auto;
-  padding: 24px 20px 40px;
+  padding: 16px 12px 32px;
 }
 
-/* Sold Notice Banner */
+/* Sold Notice */
 .sold-notice-banner {
   display: flex;
   align-items: flex-start;
-  gap: 12px;
+  gap: 10px;
   background: #fef3c7;
   border: 1px solid #fde68a;
   border-radius: 10px;
-  padding: 14px 18px;
-  margin-bottom: 20px;
+  padding: 12px 14px;
+  margin-bottom: 16px;
 }
 
 .sold-notice-banner .alert-icon {
   color: #d97706;
-  font-size: 1.25rem;
+  font-size: 1.125rem;
   margin-top: 2px;
   flex-shrink: 0;
 }
 
 .sold-notice-banner strong {
   color: #92400e;
-  font-size: 0.9375rem;
+  font-size: 0.9rem;
 }
 
 .sold-notice-banner p {
   color: #92400e;
-  font-size: 0.875rem;
+  font-size: 0.85rem;
   margin: 2px 0 0 0;
 }
 
@@ -241,7 +224,7 @@
 .property-hero-image-wrap {
   position: relative;
   width: 100%;
-  height: 320px;
+  height: 220px;
   background: #f1f5f9;
   overflow: hidden;
 }
@@ -254,10 +237,10 @@
 
 .image-overlay-badges {
   position: absolute;
-  top: 16px;
-  left: 16px;
+  top: 12px;
+  left: 12px;
   display: flex;
-  gap: 8px;
+  gap: 6px;
   flex-wrap: wrap;
 }
 
@@ -265,20 +248,19 @@
   background: rgba(15, 23, 42, 0.85);
   backdrop-filter: blur(4px);
   color: #ffffff;
-  padding: 4px 12px;
+  padding: 2px 10px;
   border-radius: 9999px;
-  font-size: 0.75rem;
+  font-size: 0.7rem;
   font-weight: 700;
   letter-spacing: 0.04em;
 }
 
 .badge-status {
-  padding: 4px 12px;
+  padding: 2px 10px;
   border-radius: 9999px;
-  font-size: 0.75rem;
+  font-size: 0.7rem;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.04em;
 }
 
 .badge-status.available {
@@ -297,23 +279,23 @@
   color: #92400e;
 }
 
-/* Property Content Body */
+/* Content Body */
 .property-content-body {
-  padding: 24px 28px;
+  padding: 16px 18px;
 }
 
-/* Header Row (Title + Price) */
+/* Header Row */
 .property-header-row {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  gap: 16px;
+  gap: 10px;
   flex-wrap: wrap;
-  margin-bottom: 16px;
+  margin-bottom: 12px;
 }
 
 .property-type-tag {
-  font-size: 0.8125rem;
+  font-size: 0.75rem;
   font-weight: 600;
   color: #64748b;
   text-transform: uppercase;
@@ -321,14 +303,15 @@
 }
 
 .property-title {
-  font-size: 1.75rem;
+  font-size: 1.4rem;
   font-weight: 800;
   color: #0f172a;
-  margin: 4px 0 2px 0;
+  margin: 2px 0 0 0;
+  line-height: 1.2;
 }
 
 .property-address {
-  font-size: 0.9375rem;
+  font-size: 0.85rem;
   color: #64748b;
   margin: 0;
 }
@@ -339,44 +322,44 @@
 }
 
 .price-amount {
-  font-size: 1.75rem;
+  font-size: 1.5rem;
   font-weight: 800;
   color: #2563eb;
   display: block;
 }
 
 .negotiable-pill {
-  font-size: 0.6875rem;
+  font-size: 0.65rem;
   font-weight: 700;
   color: #16a34a;
   background: #dcfce7;
-  padding: 2px 10px;
+  padding: 2px 8px;
   border-radius: 9999px;
   display: inline-block;
-  margin-top: 4px;
+  margin-top: 2px;
 }
 
-/* Specs Matrix */
+/* Specs */
 .specs-matrix-grid {
   display: grid;
-  grid-template-columns: repeat(6, 1fr);
-  gap: 10px;
-  margin: 16px 0 20px;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin: 12px 0 16px;
 }
 
 .spec-tile {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
   background: #f8fafc;
   border: 1px solid #e2e8f0;
   border-radius: 8px;
-  padding: 10px 12px;
+  padding: 8px 10px;
 }
 
 .spec-icon {
   color: #2563eb;
-  font-size: 1rem;
+  font-size: 0.9rem;
   flex-shrink: 0;
 }
 
@@ -386,13 +369,13 @@
 }
 
 .spec-tile .val {
-  font-size: 0.875rem;
+  font-size: 0.8rem;
   font-weight: 700;
   color: #0f172a;
 }
 
 .spec-tile .lbl {
-  font-size: 0.625rem;
+  font-size: 0.55rem;
   font-weight: 600;
   color: #94a3b8;
   text-transform: uppercase;
@@ -401,39 +384,37 @@
 
 /* Description */
 .description-section {
-  margin: 16px 0;
+  margin: 12px 0;
 }
 
 .description-section h3 {
-  font-size: 1rem;
+  font-size: 0.95rem;
   font-weight: 700;
-  color: #0f172a;
-  margin: 0 0 6px 0;
+  margin: 0 0 4px 0;
 }
 
 .description-section p {
-  font-size: 0.9375rem;
+  font-size: 0.85rem;
   color: #475569;
-  line-height: 1.7;
+  line-height: 1.6;
   margin: 0;
 }
 
 /* Amenities */
 .amenities-section {
-  margin: 16px 0 20px;
+  margin: 12px 0 16px;
 }
 
 .amenities-section h3 {
-  font-size: 1rem;
+  font-size: 0.95rem;
   font-weight: 700;
-  color: #0f172a;
-  margin: 0 0 10px 0;
+  margin: 0 0 8px 0;
 }
 
 .amenities-pills-list {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 6px;
 }
 
 .amenity-chip {
@@ -442,59 +423,56 @@
   gap: 4px;
   background: #f1f5f9;
   border: 1px solid #e2e8f0;
-  padding: 4px 12px;
+  padding: 3px 10px;
   border-radius: 9999px;
-  font-size: 0.75rem;
+  font-size: 0.7rem;
   font-weight: 600;
   color: #0f172a;
 }
 
 .amenity-chip .check {
   color: #16a34a;
-  font-size: 0.6875rem;
+  font-size: 0.65rem;
 }
 
-/* ============================================================
-   ADVISOR CONTACT CARD
-   ============================================================ */
+/* Advisor Contact Card */
 .advisor-contact-card {
   background: #f8fafc;
   border: 1px solid #e2e8f0;
   border-radius: 12px;
-  padding: 20px 24px;
-  margin-top: 20px;
+  padding: 16px;
+  margin-top: 16px;
 }
 
 .advisor-intro-header h3 {
-  font-size: 1.0625rem;
+  font-size: 1rem;
   font-weight: 700;
-  color: #0f172a;
-  margin: 0 0 4px 0;
+  margin: 0 0 2px 0;
 }
 
 .advisor-intro-header p {
-  font-size: 0.875rem;
+  font-size: 0.85rem;
   color: #64748b;
-  margin: 0 0 16px 0;
+  margin: 0 0 12px 0;
 }
 
 .advisor-profile-row {
   display: flex;
   align-items: center;
-  gap: 14px;
-  margin-bottom: 16px;
+  gap: 12px;
+  margin-bottom: 12px;
 }
 
 .advisor-avatar {
-  width: 48px;
-  height: 48px;
+  width: 44px;
+  height: 44px;
   border-radius: 9999px;
   background: #dbeafe;
   color: #2563eb;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.25rem;
+  font-size: 1.1rem;
   flex-shrink: 0;
   overflow: hidden;
 }
@@ -506,38 +484,35 @@
 }
 
 .advisor-meta h4 {
-  font-size: 1rem;
+  font-size: 0.95rem;
   font-weight: 700;
-  color: #0f172a;
   margin: 0;
 }
 
 .advisor-role {
-  font-size: 0.8125rem;
+  font-size: 0.75rem;
   color: #64748b;
-  display: block;
 }
 
 .advisor-agency {
-  font-size: 0.75rem;
+  font-size: 0.7rem;
   color: #94a3b8;
-  display: block;
 }
 
 .advisor-direct-actions {
   display: flex;
-  gap: 10px;
+  gap: 8px;
   flex-wrap: wrap;
-  margin-bottom: 16px;
+  margin-bottom: 12px;
 }
 
 .btn-advisor-action {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  padding: 8px 16px;
+  gap: 4px;
+  padding: 6px 14px;
   border-radius: 8px;
-  font-size: 0.8125rem;
+  font-size: 0.8rem;
   font-weight: 700;
   text-decoration: none;
   transition: all 0.15s;
@@ -568,16 +543,16 @@
   align-items: center;
   justify-content: center;
   width: 100%;
-  padding: 14px 20px;
+  padding: 12px 16px;
   background: #2563eb;
   color: #ffffff;
   border: none;
   border-radius: 8px;
-  font-size: 1rem;
+  font-size: 0.95rem;
   font-weight: 700;
   cursor: pointer;
   transition: all 0.15s;
-  gap: 8px;
+  gap: 6px;
 }
 
 .btn-primary-interest:hover {
@@ -586,8 +561,22 @@
   box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
 }
 
+/* Box-style CTA */
+.box-style-btn {
+  background: linear-gradient(135deg, #1e3a8a, #2563eb) !important;
+  box-shadow: 0 4px 16px rgba(37, 99, 235, 0.25) !important;
+  border-radius: 12px !important;
+  font-weight: 700 !important;
+  transition: all 0.3s ease !important;
+}
+
+.box-style-btn:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 8px 32px rgba(37, 99, 235, 0.35) !important;
+}
+
 /* ============================================================
-   MODAL
+   ENQUIRY MODAL — 50% width on PC, 100% on mobile
    ============================================================ */
 .modal-backdrop {
   position: fixed;
@@ -598,18 +587,19 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 20px;
+  padding: 16px;
 }
 
 .enquiry-modal-card {
   background: #ffffff;
   border-radius: 16px;
-  max-width: 520px;
-  width: 100%;
   max-height: 90vh;
   overflow-y: auto;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
   animation: modalSlideUp 0.25s ease;
+  width: 100%;
+  max-width: 50%; /* 🔥 50% on PC */
+  margin: 0 auto;
 }
 
 @keyframes modalSlideUp {
@@ -621,20 +611,19 @@
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  padding: 16px 20px;
+  padding: 14px 20px;
   border-bottom: 1px solid #e2e8f0;
-  gap: 12px;
+  gap: 10px;
 }
 
 .modal-header-bar h3 {
-  font-size: 1.125rem;
+  font-size: 1.05rem;
   font-weight: 700;
-  color: #0f172a;
   margin: 0;
 }
 
 .modal-header-bar p {
-  font-size: 0.8125rem;
+  font-size: 0.8rem;
   color: #64748b;
   margin: 2px 0 0 0;
 }
@@ -643,7 +632,7 @@
   background: transparent;
   border: none;
   color: #94a3b8;
-  font-size: 1.25rem;
+  font-size: 1.2rem;
   cursor: pointer;
   padding: 4px;
   transition: color 0.15s;
@@ -656,10 +645,10 @@
 
 /* Modal Form */
 .enquiry-modal-form {
-  padding: 20px 20px 16px;
+  padding: 16px 20px 12px;
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 12px;
 }
 
 .form-field {
@@ -669,12 +658,21 @@
 }
 
 .form-field label {
-  font-size: 0.8125rem;
+  font-size: 0.8rem;
   font-weight: 600;
   color: #0f172a;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.form-icon {
+  color: #2563eb;
+  font-size: 0.8rem;
 }
 
 .form-field input,
+.form-field select,
 .form-field textarea {
   padding: 8px 12px;
   border: 1px solid #e2e8f0;
@@ -689,39 +687,29 @@
 }
 
 .form-field input:focus,
+.form-field select:focus,
 .form-field textarea:focus {
   border-color: #2563eb;
   box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.06);
 }
 
-.form-field textarea {
-  resize: vertical;
-  min-height: 60px;
-}
-
-.form-row-2 {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
-}
-
 .modal-footer-row {
   display: flex;
   justify-content: flex-end;
-  gap: 10px;
-  margin-top: 8px;
+  gap: 8px;
+  margin-top: 4px;
   border-top: 1px solid #e2e8f0;
-  padding-top: 14px;
+  padding-top: 12px;
 }
 
 .btn-cancel {
   background: transparent;
   border: none;
   color: #64748b;
-  font-size: 0.875rem;
+  font-size: 0.85rem;
   font-weight: 600;
   cursor: pointer;
-  padding: 8px 16px;
+  padding: 8px 12px;
   border-radius: 6px;
   transition: background 0.15s;
 }
@@ -734,9 +722,9 @@
   background: #2563eb;
   color: #ffffff;
   border: none;
-  padding: 8px 20px;
+  padding: 8px 18px;
   border-radius: 6px;
-  font-size: 0.875rem;
+  font-size: 0.85rem;
   font-weight: 700;
   cursor: pointer;
   transition: all 0.15s;
@@ -753,7 +741,7 @@
 
 /* Success State */
 .enquiry-success-view {
-  padding: 24px 20px 20px;
+  padding: 20px 20px 16px;
   text-align: center;
 }
 
@@ -761,45 +749,44 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 64px;
-  height: 64px;
+  width: 56px;
+  height: 56px;
   background: #dcfce7;
   border-radius: 9999px;
   color: #16a34a;
-  font-size: 2rem;
-  margin-bottom: 12px;
+  font-size: 1.8rem;
+  margin-bottom: 10px;
 }
 
 .enquiry-success-view h3 {
-  font-size: 1.25rem;
+  font-size: 1.2rem;
   font-weight: 700;
-  color: #0f172a;
-  margin: 0 0 8px 0;
+  margin: 0 0 6px 0;
 }
 
 .success-msg {
-  font-size: 0.9375rem;
+  font-size: 0.9rem;
   color: #475569;
   line-height: 1.6;
-  margin: 0 0 16px 0;
+  margin: 0 0 14px 0;
 }
 
 .advisor-followup-box {
   background: #f1f5f9;
   border-radius: 8px;
-  padding: 12px 16px;
-  margin-bottom: 16px;
+  padding: 10px 14px;
+  margin-bottom: 14px;
 }
 
 .advisor-followup-box p {
-  font-size: 0.875rem;
+  font-size: 0.85rem;
   color: #0f172a;
   margin: 0;
 }
 
 .modal-success-actions {
   display: flex;
-  gap: 10px;
+  gap: 8px;
   flex-wrap: wrap;
 }
 
@@ -811,9 +798,9 @@
   gap: 6px;
   background: #16a34a;
   color: #ffffff;
-  padding: 8px 16px;
+  padding: 8px 14px;
   border-radius: 6px;
-  font-size: 0.875rem;
+  font-size: 0.85rem;
   font-weight: 700;
   text-decoration: none;
   transition: background 0.15s;
@@ -827,9 +814,9 @@
   background: #f1f5f9;
   border: none;
   color: #0f172a;
-  padding: 8px 16px;
+  padding: 8px 14px;
   border-radius: 6px;
-  font-size: 0.875rem;
+  font-size: 0.85rem;
   font-weight: 600;
   cursor: pointer;
   transition: background 0.15s;
@@ -839,15 +826,24 @@
   background: #e2e8f0;
 }
 
+.btn-submit-another {
+  background: #dbeafe;
+  color: #1e40af;
+}
+
+.btn-submit-another:hover {
+  background: #bfdbfe;
+}
+
 /* ============================================================
    FOOTER
    ============================================================ */
 .public-qr-footer {
   text-align: center;
-  padding: 16px 20px;
+  padding: 12px 16px;
   border-top: 1px solid #e2e8f0;
   background: #ffffff;
-  font-size: 0.75rem;
+  font-size: 0.7rem;
   color: #94a3b8;
   flex-shrink: 0;
 }
@@ -857,72 +853,21 @@
 }
 
 /* ============================================================
-   RESPONSIVE
+   RESPONSIVE — MODAL 100% width on mobile
    ============================================================ */
-
-/* Tablet */
-@media (max-width: 1024px) {
-  .specs-matrix-grid {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 8px;
-  }
-
-  .property-content-body {
-    padding: 20px 22px;
-  }
-
-  .property-hero-image-wrap {
-    height: 240px;
-  }
-}
-
-/* Mobile */
 @media (max-width: 768px) {
-  .public-qr-main {
-    padding: 16px 12px 32px;
+  .enquiry-modal-card {
+    max-width: 100% !important; /* 🔥 Full width on mobile */
+    margin: 0 8px;
+    border-radius: 12px;
   }
 
-  .property-content-body {
-    padding: 16px 18px;
+  .modal-header-bar {
+    padding: 12px 16px;
   }
 
-  .property-header-row {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .price-box {
-    text-align: left;
-    width: 100%;
-  }
-
-  .property-title {
-    font-size: 1.375rem;
-  }
-
-  .price-amount {
-    font-size: 1.375rem;
-  }
-
-  .specs-matrix-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .advisor-profile-row {
-    flex-wrap: wrap;
-  }
-
-  .advisor-direct-actions {
-    flex-direction: column;
-  }
-
-  .btn-advisor-action {
-    width: 100%;
-    justify-content: center;
-  }
-
-  .form-row-2 {
-    grid-template-columns: 1fr;
+  .enquiry-modal-form {
+    padding: 12px 16px 12px;
   }
 
   .modal-footer-row {
@@ -941,102 +886,79 @@
   .btn-whatsapp-chat {
     width: 100%;
   }
+}
 
-  .header-container {
-    flex-direction: column;
-    align-items: stretch;
+/* ============================================================
+   RESPONSIVE — OTHER ELEMENTS
+   ============================================================ */
+
+/* Tablet & Desktop */
+@media (min-width: 769px) {
+  .property-content-body {
+    padding: 20px 24px;
   }
-
-  .header-controls {
-    justify-content: space-between;
-    flex-wrap: wrap;
+  .property-hero-image-wrap {
+    height: 320px;
   }
-
-  .lang-currency-selectors {
-    flex-wrap: wrap;
+  .specs-matrix-grid {
+    grid-template-columns: repeat(6, 1fr);
+    gap: 10px;
   }
-
-  .smart-qr-tag {
-    font-size: 0.6875rem;
+  .property-title {
+    font-size: 1.75rem;
   }
-
-  .public-qr-header {
-    padding: 10px 14px;
+  .price-amount {
+    font-size: 1.75rem;
   }
-
-  .image-overlay-badges {
-    top: 10px;
-    left: 10px;
-    gap: 4px;
-  }
-
-  .badge-code,
-  .badge-status {
-    font-size: 0.625rem;
-    padding: 2px 8px;
-  }
-
-  .sold-notice-banner {
-    flex-direction: column;
-    align-items: flex-start;
-    padding: 12px 14px;
+  .public-qr-main {
+    padding: 24px 20px 40px;
   }
 }
 
-/* Small Mobile */
+/* Small mobile */
 @media (max-width: 480px) {
-  .specs-matrix-grid {
-    grid-template-columns: 1fr 1fr;
-    gap: 6px;
-  }
-
-  .spec-tile {
-    padding: 6px 8px;
-  }
-
-  .spec-tile .val {
-    font-size: 0.75rem;
-  }
-
-  .spec-tile .lbl {
-    font-size: 0.5625rem;
-  }
-
   .property-content-body {
     padding: 12px 14px;
   }
-
+  .property-hero-image-wrap {
+    height: 180px;
+  }
   .property-title {
-    font-size: 1.125rem;
+    font-size: 1.15rem;
   }
-
   .price-amount {
-    font-size: 1.125rem;
+    font-size: 1.15rem;
   }
-
-  .enquiry-modal-card {
-    max-width: 100%;
-    margin: 0 8px;
-    border-radius: 12px;
+  .specs-matrix-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 6px;
   }
-
-  .modal-header-bar h3 {
-    font-size: 1rem;
+  .spec-tile {
+    padding: 6px 8px;
   }
-
-  .public-qr-header .brand-logo-wrap {
-    font-size: 0.9375rem;
+  .spec-tile .val {
+    font-size: 0.7rem;
   }
-
-  .lang-select,
-  .currency-select {
-    font-size: 0.6875rem;
-    min-width: 50px;
+  .spec-tile .lbl {
+    font-size: 0.5rem;
   }
-
-  .public-qr-footer {
-    font-size: 0.6875rem;
-    padding: 12px 16px;
+  .advisor-direct-actions {
+    flex-direction: column;
+  }
+  .btn-advisor-action {
+    width: 100%;
+    justify-content: center;
+  }
+  .btn-primary-interest {
+    font-size: 0.85rem;
+    padding: 10px 14px;
+  }
+  .header-controls {
+    flex-wrap: wrap;
+    justify-content: flex-start;
+  }
+  .smart-qr-tag {
+    font-size: 0.6rem;
   }
 }
 
