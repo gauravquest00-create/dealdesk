@@ -39,15 +39,23 @@ export const AuthProvider = ({ children }) => {
           sessionStorage.setItem('dealdesk_user', JSON.stringify(res.data.user));
           if (res.data.business) {
             sessionStorage.setItem('dealdesk_business', JSON.stringify(res.data.business));
-            if (res.data.business.entitlementStatus === 'EXPIRED') {
+            
+            // ✅ FIX: Check trial expiry based on entitlementStatus OR trialEndsAt date
+            const businessData = res.data.business;
+            const isEntitlementExpired = businessData.entitlementStatus === 'EXPIRED';
+            const trialEndsAt = businessData.trialEndsAt;
+            const isDateExpired = trialEndsAt && new Date() > new Date(trialEndsAt);
+            
+            if (isEntitlementExpired || isDateExpired) {
               setTrialExpired(true);
+            } else {
+              setTrialExpired(false);
             }
           }
         })
         .catch(() => {
           // Agar API fail ho (jaise server down ya network issue), toh session clear mat karo,
           // Sirf state null karo taaki loading complete ho aur user redirect ho jaye.
-          // Note: 401 status ko apiClient already handle kar leta hai (redirect).
           setUser(null);
           setBusiness(null);
         })
