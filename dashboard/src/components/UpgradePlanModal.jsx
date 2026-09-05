@@ -83,7 +83,6 @@ export const UpgradePlanModal = ({ isOpen, onClose, onSuccess, title, message, f
             });
             addToast('🎉 Subscription upgraded successfully!');
             setProcessing(false);
-            // Refresh and close
             if (onSuccess) onSuccess();
             onClose();
           } catch (err) {
@@ -128,7 +127,7 @@ export const UpgradePlanModal = ({ isOpen, onClose, onSuccess, title, message, f
           </button>
         </div>
 
-        {/* Feature that triggered upgrade (optional) */}
+        {/* Feature banner */}
         {feature && (
           <div className="upgrade-feature-banner">
             <span className="upgrade-feature-label">Reached limit for:</span>
@@ -136,7 +135,7 @@ export const UpgradePlanModal = ({ isOpen, onClose, onSuccess, title, message, f
           </div>
         )}
 
-        {/* Plans */}
+        {/* Plans Grid */}
         <div className="upgrade-plans-container">
           {loading ? (
             <div className="upgrade-loading">Loading plans...</div>
@@ -145,8 +144,10 @@ export const UpgradePlanModal = ({ isOpen, onClose, onSuccess, title, message, f
           ) : (
             plans.map((plan) => {
               const planId = plan.id || plan.planId;
-              const price = plan.calculatedMonthly?.amount || plan.monthlyPriceUSD || 0;
-              const formattedPrice = price > 0 ? formatPrice(price) : 'Contact Sales';
+              
+              // ✅ Use raw USD price (formatPrice will convert based on selected currency)
+              const priceUSD = plan.monthlyPriceUSD || 0;
+              const formattedPrice = priceUSD > 0 ? formatPrice(priceUSD) : 'Contact Sales';
               const isCurrent = planId === currentPlan;
 
               return (
@@ -162,7 +163,7 @@ export const UpgradePlanModal = ({ isOpen, onClose, onSuccess, title, message, f
                   
                   <div className="upgrade-plan-price">
                     <span className="upgrade-plan-amount">{formattedPrice}</span>
-                    {price > 0 && <span className="upgrade-plan-period">/ month</span>}
+                    {priceUSD > 0 && <span className="upgrade-plan-period">/ month</span>}
                   </div>
                   
                   <ul className="upgrade-plan-features">
