@@ -590,6 +590,7 @@
   padding: 16px;
 }
 
+/* 🔥 UPDATED: Exactly 50% width on desktop, full width on mobile */
 .enquiry-modal-card {
   background: #ffffff;
   border-radius: 16px;
@@ -597,8 +598,8 @@
   overflow-y: auto;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
   animation: modalSlideUp 0.25s ease;
-  width: 100%;
-  max-width: 50%; /* 🔥 50% on PC */
+  width: 50%;              /* 🔥 Fixed 50% width on PC */
+  max-width: 50%;          /* 🔥 Prevents exceeding 50% */
   margin: 0 auto;
 }
 
@@ -857,7 +858,8 @@
    ============================================================ */
 @media (max-width: 768px) {
   .enquiry-modal-card {
-    max-width: 100% !important; /* 🔥 Full width on mobile */
+    width: 100% !important;    /* 🔥 Full width on mobile */
+    max-width: 100% !important;
     margin: 0 8px;
     border-radius: 12px;
   }
