@@ -10,6 +10,7 @@ import { generateToken } from '../utils/token.js';
 import { ROLES } from '../constants/roles.js';
 import { ACCOUNT_STATUS, ENTITLEMENT_STATUS, TRIAL_STATUS } from '../constants/statuses.js';
 
+// ✅ FIXED: Now accepts trialEndsAt, entitlementStatus, trialStatus from controller
 export const registerBusinessAndAdmin = async ({
   businessName,
   fullName,
@@ -25,6 +26,10 @@ export const registerBusinessAndAdmin = async ({
   billingCycle = 'monthly',
   isPaid = false,
   paymentDetails = null,
+  // ✅ New parameters from controller
+  trialEndsAt: providedTrialEndsAt = null,
+  entitlementStatus: providedEntitlementStatus = null,
+  trialStatus: providedTrialStatus = null,
 }) => {
   const emailClean = businessEmail.trim().toLowerCase();
   const domain = emailClean.split('@')[1] || '';
@@ -35,7 +40,7 @@ export const registerBusinessAndAdmin = async ({
     throw { statusCode: 400, message: 'An account with this email already exists.', code: 'EMAIL_ALREADY_EXISTS' };
   }
 
-  // 1. Trial Abuse Prevention Check (if free trial chosen)
+  // 1. Trial Abuse Prevention Check (only for free trial)
   const emailH = sha256(emailClean);
   const domainH = sha256(domain);
   const existingTrial = await TrialEligibility.findOne({
@@ -44,21 +49,43 @@ export const registerBusinessAndAdmin = async ({
 
   const isEligibleForTrial = !existingTrial;
 
-  // 2. Create Business
-  const slug = businessName.toLowerCase().replace(/[^a-z0-9]/g, '-') + '-' + Math.floor(1000 + Math.random() * 9000);
+  // 2. Determine trial days, end date, and status
   const now = new Date();
-  
-  let entitlementStatus = ENTITLEMENT_STATUS.TRIAL_ACTIVE;
-  let trialDays = isEligibleForTrial ? 3 : 0;
-  let trialEndsAt = new Date(now.getTime() + trialDays * 24 * 60 * 60 * 1000);
+  let trialDays = 0;
+  let trialEndsAt = providedTrialEndsAt;
+  let entitlementStatus = providedEntitlementStatus;
+  let trialStatus = providedTrialStatus;
 
+  // If controller didn't provide, compute based on isPaid and eligibility
   if (isPaid) {
+    // Paid → no trial, active subscription
+    trialDays = 0;
     entitlementStatus = ENTITLEMENT_STATUS.ACTIVE_SUBSCRIPTION;
     trialEndsAt = new Date(now.getTime() + (billingCycle === 'annual' ? 365 : 30) * 24 * 60 * 60 * 1000);
+    trialStatus = null;
   } else if (!isEligibleForTrial) {
+    // Not eligible for trial → payment required
+    trialDays = 0;
     entitlementStatus = ENTITLEMENT_STATUS.PAYMENT_REQUIRED;
+    trialEndsAt = null;
+    trialStatus = null;
+  } else if (providedTrialEndsAt) {
+    // ✅ Use provided trialEndsAt (from controller)
+    trialDays = 3;
+    trialEndsAt = providedTrialEndsAt;
+    entitlementStatus = ENTITLEMENT_STATUS.TRIAL_ACTIVE;
+    trialStatus = TRIAL_STATUS.ACTIVE;
+  } else {
+    // ✅ Default 3-day trial
+    trialDays = 3;
+    trialEndsAt = new Date(now.getTime() + trialDays * 24 * 60 * 60 * 1000);
+    entitlementStatus = ENTITLEMENT_STATUS.TRIAL_ACTIVE;
+    trialStatus = TRIAL_STATUS.ACTIVE;
   }
 
+  // 3. Create Business
+  const slug = businessName.toLowerCase().replace(/[^a-z0-9]/g, '-') + '-' + Math.floor(1000 + Math.random() * 9000);
+  
   const business = await Business.create({
     name: businessName,
     slug,
@@ -69,13 +96,13 @@ export const registerBusinessAndAdmin = async ({
     currency,
     timezone,
     accountStatus: ACCOUNT_STATUS.ACTIVE,
-    entitlementStatus,
+    entitlementStatus: entitlementStatus,
     planId: isPaid ? planId : 'starter',
     billingCycle,
-    trialEndsAt,
+    trialEndsAt: trialEndsAt, // ✅ now correctly set
   });
 
-  // 3. Create Admin User
+  // 4. Create Admin User
   const passwordHash = await hashPassword(password);
   let finalUsername = customUsername 
     ? customUsername.trim().toLowerCase() 
@@ -99,8 +126,8 @@ export const registerBusinessAndAdmin = async ({
     isEmailVerified: true,
   });
 
-  // 4. Create Trial Record & Eligibility Ledger
-  if (!isPaid && isEligibleForTrial) {
+  // 5. Trial Record & Eligibility Ledger (only for trial)
+  if (trialStatus === TRIAL_STATUS.ACTIVE && trialDays > 0) {
     await Trial.create({
       businessId: business._id,
       startedAt: now,
@@ -117,7 +144,7 @@ export const registerBusinessAndAdmin = async ({
       previousBusinessId: business._id,
     });
   } else if (isPaid) {
-    // Record paid subscription
+    // 6. Paid: create subscription & payment
     const sub = await Subscription.create({
       businessId: business._id,
       planId,
@@ -144,7 +171,7 @@ export const registerBusinessAndAdmin = async ({
     });
   }
 
-  // 5. Audit Log
+  // 7. Audit Log
   await AuditLog.create({
     who: fullName,
     userId: adminUser._id,
@@ -155,10 +182,14 @@ export const registerBusinessAndAdmin = async ({
     targetId: String(business._id),
     reason: isPaid 
       ? `Business signup with immediate ${planId} (${billingCycle}) subscription` 
-      : `Initial business signup with ${trialDays}-day free trial`,
+      : `Initial business signup with ${trialDays}-day free trial (expires: ${trialEndsAt?.toISOString()})`,
   });
 
-  const token = generateToken({ userId: adminUser._id, role: adminUser.role, businessId: business._id });
+  const token = generateToken({ 
+    userId: adminUser._id, 
+    role: adminUser.role, 
+    businessId: business._id 
+  });
 
   return {
     user: adminUser,
@@ -167,6 +198,7 @@ export const registerBusinessAndAdmin = async ({
     trialDays,
     isEligibleForTrial,
     isPaid,
+    trialEndsAt,
     credentials: {
       username: finalUsername,
       email: emailClean,
@@ -202,18 +234,17 @@ export const loginUser = async ({ identifier, password }) => {
     if (!business) {
       throw { statusCode: 403, message: 'Business workspace not found', code: 'WORKSPACE_NOT_FOUND' };
     }
-    // Business suspension / deactivation overrides subscription status
     if (business.accountStatus === ACCOUNT_STATUS.SUSPENDED) {
       throw { 
         statusCode: 403, 
-        message: 'Your business account is currently suspended. Please contact enterprise support at support@dealdesk.io.', 
+        message: 'Your business account is currently suspended. Please contact support.', 
         code: 'BUSINESS_SUSPENDED' 
       };
     }
     if (business.accountStatus === ACCOUNT_STATUS.DEACTIVATED) {
       throw { 
         statusCode: 403, 
-        message: 'This brokerage workspace has been deactivated. Please contact administrator support.', 
+        message: 'This brokerage workspace has been deactivated.', 
         code: 'BUSINESS_DEACTIVATED' 
       };
     }
