@@ -50,7 +50,7 @@ export const LeadsPage = () => {
     name: '',
     phone: '',
     email: '',
-    source: 'MANUAL',
+    source: 'Manual', // ✅ FIXED: 'Manual' instead of 'MANUAL'
     interestedPropertyId: '',
     budgetMax: 500000,
     notes: '',
@@ -65,7 +65,6 @@ export const LeadsPage = () => {
     leadApi.list(params)
       .then(res => {
         let allLeads = res.data || [];
-        // Role-based filtering: Admin sees all, Agent sees only assigned
         if (!isAdmin) {
           allLeads = allLeads.filter(l => l.assignedAgentId?._id === user._id || l.assignedAgentId === user._id);
         }
@@ -119,10 +118,24 @@ export const LeadsPage = () => {
     } catch (error) {}
 
     try {
-      await leadApi.create(formData);
+      // ✅ FIX: Convert empty interestedPropertyId to null to avoid ObjectId cast error
+      const payload = {
+        ...formData,
+        interestedPropertyId: formData.interestedPropertyId || null,
+        source: 'Manual', // ✅ Ensure 'Manual' (matches enum)
+      };
+      await leadApi.create(payload);
       addToast('Lead recorded with initial baseline score');
       setShowAddModal(false);
-      setFormData({ name: '', phone: '', email: '', source: 'MANUAL', interestedPropertyId: '', budgetMax: 500000, notes: '' });
+      setFormData({ 
+        name: '', 
+        phone: '', 
+        email: '', 
+        source: 'Manual', 
+        interestedPropertyId: '', 
+        budgetMax: 500000, 
+        notes: '' 
+      });
       loadLeads();
     } catch (err) {
       if (err?.data?.suggestion) {
@@ -141,20 +154,20 @@ export const LeadsPage = () => {
   // ============================================================
   const getSourceIcon = (source) => {
     switch (source) {
-      case 'SMART_QR': return <FaQrcode className="ld-source-icon qr" />;
+      case 'Smart QR': return <FaQrcode className="ld-source-icon qr" />;
       case 'SOCIAL_LINK': return <FaLink className="ld-source-icon social" />;
-      case 'OPEN_HOUSE': return <FaDoorOpen className="ld-source-icon openhouse" />;
-      case 'MANUAL': return <FaUserPlus className="ld-source-icon manual" />;
+      case 'Open House': return <FaDoorOpen className="ld-source-icon openhouse" />;
+      case 'Manual': return <FaUserPlus className="ld-source-icon manual" />;
       default: return <FaUserPlus className="ld-source-icon manual" />;
     }
   };
 
   const getSourceLabel = (source) => {
     switch (source) {
-      case 'SMART_QR': return 'Smart QR';
+      case 'Smart QR': return 'Smart QR';
       case 'SOCIAL_LINK': return 'Social Link';
-      case 'OPEN_HOUSE': return 'Open House';
-      case 'MANUAL': return 'Manual Entry';
+      case 'Open House': return 'Open House';
+      case 'Manual': return 'Manual Entry';
       default: return source || 'Manual';
     }
   };
@@ -391,7 +404,7 @@ export const LeadsPage = () => {
         </>
       )}
 
-      {/* CAPTURE LEAD MODAL (box-style) */}
+      {/* CAPTURE LEAD MODAL */}
       {showAddModal && (
         <div className="ld-modal-overlay" onClick={() => setShowAddModal(false)}>
           <div className="ld-modal ld-modal-create" onClick={e => e.stopPropagation()}>
@@ -418,14 +431,14 @@ export const LeadsPage = () => {
                 <div className="ld-form-group">
                   <label>Source</label>
                   <select value={formData.source} onChange={e => setFormData({ ...formData, source: e.target.value })}>
-                    <option value="MANUAL">Manual Entry</option>
-                    <option value="SMART_QR">Smart QR</option>
+                    <option value="Manual">Manual Entry</option>
+                    <option value="Smart QR">Smart QR</option>
                     <option value="SOCIAL_LINK">Social Link</option>
-                    <option value="OPEN_HOUSE">Open House</option>
-                    <option value="WEBSITE">Website</option>
-                    <option value="WHATSAPP">WhatsApp</option>
-                    <option value="PHONE">Phone Call</option>
-                    <option value="REFERRAL">Referral</option>
+                    <option value="Open House">Open House</option>
+                    <option value="Website">Website</option>
+                    <option value="WhatsApp">WhatsApp</option>
+                    <option value="Phone">Phone Call</option>
+                    <option value="Referral">Referral</option>
                   </select>
                 </div>
                 <div className="ld-form-group">
@@ -434,9 +447,9 @@ export const LeadsPage = () => {
                 </div>
               </div>
               <div className="ld-form-group">
-                <label>Interested Property</label>
+                <label>Interested Property (Optional)</label>
                 <select value={formData.interestedPropertyId} onChange={e => setFormData({ ...formData, interestedPropertyId: e.target.value })}>
-                  <option value="">Select...</option>
+                  <option value="">None</option>
                   {properties.map(p => (
                     <option key={p._id} value={p._id}>{p.projectName} ({p.propertyCode})</option>
                   ))}
@@ -460,9 +473,6 @@ export const LeadsPage = () => {
           </div>
         </div>
       )}
-
-      {/* LEAD DETAIL MODAL (when clicking on a lead) — optional, can use existing detail page */}
-      {/* We're using navigation to `/app/leads/:id` for details, consistent with other modules */}
 
       {/* UPGRADE MODAL */}
       <UpgradePlanModal
