@@ -359,17 +359,90 @@
   color: var(--color-danger);
 }
 
-@media (max-width: 860px) {
-  .header-search {
-    display: none;
+/* ============================================================
+   RESPONSIVE FIXES for Mobile & Tablet
+   ============================================================ */
+
+@media (max-width: 768px) {
+  .notif-dropdown-menu {
+    right: -10px !important;
+    left: auto !important;
+    width: calc(100vw - 20px) !important;
+    max-width: 360px !important;
+    min-width: 280px !important;
+    max-height: 80vh !important;
   }
+
+  .profile-menu {
+    right: -10px !important;
+    left: auto !important;
+    width: calc(100vw - 20px) !important;
+    max-width: 280px !important;
+    min-width: 200px !important;
+  }
+
+  .notif-dropdown-menu,
+  .profile-menu {
+    z-index: 200 !important;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15) !important;
+  }
+
+  .header-actions {
+    gap: 6px !important;
+  }
+
   .header-select-pill {
-    display: none;
+    display: none !important;
   }
 }
 
-@media (max-width: 640px) {
+@media (max-width: 480px) {
+  .notif-dropdown-menu {
+    right: -5px !important;
+    width: calc(100vw - 16px) !important;
+    max-width: 320px !important;
+    min-width: 260px !important;
+  }
+
+  .profile-menu {
+    right: -5px !important;
+    width: calc(100vw - 16px) !important;
+    max-width: 240px !important;
+    min-width: 180px !important;
+  }
+
   .profile-info-text {
-    display: none;
+    display: none !important;
+  }
+
+  .avatar-circle {
+    width: 32px !important;
+    height: 32px !important;
+    font-size: 0.75rem !important;
+  }
+
+  .header-icon-btn {
+    width: 32px !important;
+    height: 32px !important;
+  }
+
+  .badge-dot-num {
+    font-size: 0.5rem !important;
+    min-width: 14px !important;
+    height: 14px !important;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  .notif-dropdown-menu {
+    right: -10px !important;
+    width: calc(100vw - 40px) !important;
+    max-width: 380px !important;
+  }
+
+  .profile-menu {
+    right: -10px !important;
+    width: calc(100vw - 40px) !important;
+    max-width: 260px !important;
   }
 }
