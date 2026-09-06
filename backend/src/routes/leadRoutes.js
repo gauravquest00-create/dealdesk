@@ -14,6 +14,7 @@ import {
 } from '../controllers/leadController.js';
 import { authenticate } from '../middleware/auth.js';
 import { enforceBusinessScope } from '../middleware/businessScope.js';
+import { checkBusinessAccess } from '../middleware/checkBusinessAccess.js';
 
 const router = express.Router();
 
@@ -23,10 +24,11 @@ const router = express.Router();
 router.post('/public/leads', publicCreateLead);
 
 // ============================================================
-// PROTECTED ROUTES
+// PROTECTED ROUTES (Auth + Business Scope + Access Check)
 // ============================================================
 router.use(authenticate);
 router.use(enforceBusinessScope);
+router.use(checkBusinessAccess); // ✅ ADD THIS — blocks expired/suspended accounts
 
 router.get('/', listLeads);
 router.get('/stats', getLeadStats);
