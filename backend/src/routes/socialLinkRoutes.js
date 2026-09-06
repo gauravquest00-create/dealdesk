@@ -12,6 +12,7 @@ import {
 import { authenticate } from '../middleware/auth.js';
 import { enforceBusinessScope } from '../middleware/businessScope.js';
 import { checkLimitMiddleware } from '../middleware/limitChecker.js';
+import { checkBusinessAccess } from '../middleware/checkBusinessAccess.js';
 
 const router = express.Router();
 
@@ -21,6 +22,7 @@ router.get('/slug/:slug', getSocialLinkBySlug);
 // PROTECTED ROUTES
 router.use(authenticate);
 router.use(enforceBusinessScope);
+router.use(checkBusinessAccess);
 
 // ✅ Add limit check before creating a social link
 router.post('/', checkLimitMiddleware('socialLinks'), createSocialLink);
