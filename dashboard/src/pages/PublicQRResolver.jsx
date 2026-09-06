@@ -176,6 +176,12 @@ export const PublicQRResolver = () => {
 
   const t = translations[language] || translations.en;
 
+  // ---- Navigate to landing page ----
+  const goHome = () => {
+    const landingUrl = import.meta.env.VITE_LANDING_URL || '/';
+    window.location.href = landingUrl;
+  };
+
   useEffect(() => {
     qrApi.resolve(qrId)
       .then(res => setData(res.data))
@@ -194,7 +200,6 @@ export const PublicQRResolver = () => {
     try {
       const activeProp = data?.isSoldFallback ? data?.replacementProperty : data?.property;
       
-      // 🔥 CRITICAL: Use 'Smart QR' — matches backend LEAD_SOURCE.SMART_QR
       const res = await qrApi.submitEnquiry({
         qrId,
         propertyId: activeProp?._id,
@@ -202,7 +207,7 @@ export const PublicQRResolver = () => {
         phone: formData.phone,
         email: formData.email,
         budget: formData.budget,
-        source: 'Smart QR', // ✅ CORRECT — valid enum value
+        source: 'Smart QR',
       });
       
       setEnquirySuccess(res.data);
@@ -268,7 +273,12 @@ export const PublicQRResolver = () => {
       {/* Header */}
       <header className="public-qr-header">
         <div className="header-container">
-          <div className="brand-logo-wrap">
+          <div 
+            className="brand-logo-wrap" 
+            onClick={goHome} 
+            style={{ cursor: 'pointer' }}
+            title="Go to DealDesk Home"
+          >
             <DealDeskLogo size="sm" theme="dark" />
           </div>
           <div className="header-controls">
@@ -507,6 +517,10 @@ export const PublicQRResolver = () => {
                   </button>
                   <button className="btn-finish btn-submit-another" onClick={resetForm}>
                     Submit Another Enquiry
+                  </button>
+                  {/* ---- Explore DealDesk button ---- */}
+                  <button className="btn-finish" onClick={goHome}>
+                    Explore DealDesk
                   </button>
                 </div>
               </div>
