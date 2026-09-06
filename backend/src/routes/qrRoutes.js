@@ -3,6 +3,7 @@ import * as qrCtrl from '../controllers/qrController.js';
 import { authenticate } from '../middleware/auth.js';
 import { enforceBusinessScope } from '../middleware/businessScope.js';
 import { checkLimitMiddleware } from '../middleware/limitChecker.js';
+import { checkBusinessAccess } from '../middleware/checkBusinessAccess.js';
 
 const router = express.Router();
 
@@ -13,6 +14,8 @@ router.post('/public/enquiry', qrCtrl.submitPublicEnquiry);
 // Protected routes
 router.use(authenticate);
 router.use(enforceBusinessScope);
+router.use(checkBusinessAccess);
+
 router.post('/', checkLimitMiddleware('qrs'), qrCtrl.createOrReassignQR);
 router.get('/', qrCtrl.listQRs);
 router.get('/:qrId', qrCtrl.getQR);
