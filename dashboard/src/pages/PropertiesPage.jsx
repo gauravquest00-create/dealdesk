@@ -70,7 +70,8 @@ const getCurrencySymbol = (currencyCode) => {
 
 export const PropertiesPage = () => {
   const { addToast } = useToast();
-  const { formatPrice } = useCurrency();
+  // 🔥 FIX: Take currency, rates, and formatPrice from context
+  const { currency, rates, formatPrice } = useCurrency();
   const navigate = useNavigate();
   const [properties, setProperties] = useState([]);
   const [agents, setAgents] = useState([]);
@@ -81,6 +82,31 @@ export const PropertiesPage = () => {
   const [activeFormTab, setActiveFormTab] = useState('basic');
   const [uploading, setUploading] = useState(false);
   const [dragActive, setDragActive] = useState(false);
+
+  // ---- NEW: Helper to display price with conversion ----
+  const getDisplayPrice = (property) => {
+    const propCurrency = property.currency || 'USD';
+    const amount = property.askingPrice || 0;
+    const targetCurrency = currency;
+
+    // If same currency, just show with symbol
+    if (propCurrency === targetCurrency) {
+      const symbol = getCurrencySymbol(propCurrency);
+      return `${symbol}${amount.toLocaleString()}`;
+    }
+
+    // If rates not loaded or missing, fallback to property's native display
+    if (!rates[propCurrency] || !rates[targetCurrency]) {
+      const symbol = getCurrencySymbol(propCurrency);
+      return `${symbol}${amount.toLocaleString()}`;
+    }
+
+    // Convert: property currency → USD → target currency
+    const usdAmount = amount / rates[propCurrency];
+    const converted = usdAmount * rates[targetCurrency];
+    const symbol = getCurrencySymbol(targetCurrency);
+    return `${symbol}${Math.round(converted).toLocaleString()}`;
+  };
 
   const [formData, setFormData] = useState({
     propertyCode: '',
@@ -101,7 +127,7 @@ export const PropertiesPage = () => {
     furnishing: 'Semi-Furnished',
     transactionType: 'Sale',
     askingPrice: 420000,
-    currency: 'USD', // ✅ Added
+    currency: 'USD',
     isNegotiable: true,
     monthlyMaintenance: 180,
     commissionPercent: 2.0,
@@ -273,7 +299,7 @@ export const PropertiesPage = () => {
         commissionPercent: Number(formData.commissionPercent),
         expectedRoi: Number(formData.expectedRoi),
         photos: (formData.photos || []).map(p => ({ url: p.url, isCover: p.isCover })),
-        currency: formData.currency || 'USD', // ✅ Send currency
+        currency: formData.currency || 'USD',
       };
 
       await propertyApi.create(payload);
@@ -378,10 +404,8 @@ export const PropertiesPage = () => {
                 <div className="price-and-action">
                   <div className="price-block">
                     <span className="price-val">
-                      {/* ✅ Show price with property's currency symbol */}
-                      {p.currency && p.currency !== 'USD' 
-                        ? `${getCurrencySymbol(p.currency)}${p.askingPrice?.toLocaleString()}`
-                        : formatPrice(p.askingPrice)}
+                      {/* 🔥 FIX: Use getDisplayPrice for proper conversion */}
+                      {getDisplayPrice(p)}
                     </span>
                     {p.isNegotiable && <span className="neg-hint">Negotiable</span>}
                   </div>
@@ -591,7 +615,6 @@ export const PropertiesPage = () => {
                         onChange={e => setFormData({ ...formData, askingPrice: e.target.value })} 
                       />
                     </div>
-                    {/* ✅ Currency Dropdown */}
                     <div className="form-group">
                       <label>Listing Currency</label>
                       <select 
