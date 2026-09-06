@@ -2,14 +2,102 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { socialLinkApi, publicLeadApi } from '../services/api/services.js';
 import { useToast } from '../context/ToastContext.jsx';
+import { useLanguage } from '../context/LanguageContext.jsx';
+import { useCurrency } from '../context/CurrencyContext.jsx';
 import { DealDeskLogo } from '../components/DealDeskLogo.jsx';
-import { FaCheckCircle } from 'react-icons/fa';
+import { FaCheckCircle, FaArrowLeft, FaGlobe, FaLanguage } from 'react-icons/fa';
 import './PublicSocialForm.css';
+
+// Translation object for UI elements
+const translations = {
+  en: {
+    title: 'Enquiry Submitted! 🎉',
+    thankYou: 'Thank you for your interest in',
+    ourTeam: 'Our team will reach out to you shortly.',
+    submitAnother: 'Submit Another Enquiry',
+    exploreDealDesk: 'Explore DealDesk',
+    backToHome: 'Back to Home',
+    fullName: 'Full Name *',
+    phoneNumber: 'Contact Number *',
+    emailAddress: 'Email Address',
+    budgetRange: 'Budget Range',
+    submitEnquiry: 'Submit Enquiry',
+    submitting: 'Submitting...',
+    poweredBy: 'Powered by',
+    selectBudget: 'Select budget range...',
+    loading: 'Loading...',
+    linkNotFound: 'Link Not Found',
+    linkNotFoundDesc: 'The social link you\'re looking for doesn\'t exist or has expired.',
+  },
+  hi: {
+    title: 'जांच सबमिट हुई! 🎉',
+    thankYou: 'में आपकी रुचि के लिए धन्यवाद',
+    ourTeam: 'हमारी टीम जल्द ही आपसे संपर्क करेगी।',
+    submitAnother: 'एक और जांच सबमिट करें',
+    exploreDealDesk: 'DealDesk एक्सप्लोर करें',
+    backToHome: 'होम पर जाएं',
+    fullName: 'पूरा नाम *',
+    phoneNumber: 'संपर्क नंबर *',
+    emailAddress: 'ईमेल पता',
+    budgetRange: 'बजट रेंज',
+    submitEnquiry: 'जांच सबमिट करें',
+    submitting: 'सबमिट हो रहा है...',
+    poweredBy: 'द्वारा संचालित',
+    selectBudget: 'बजट रेंज चुनें...',
+    loading: 'लोड हो रहा है...',
+    linkNotFound: 'लिंक नहीं मिला',
+    linkNotFoundDesc: 'आप जिस सोशल लिंक को ढूंढ रहे हैं वह मौजूद नहीं है या समाप्त हो गया है।',
+  },
+  ar: {
+    title: 'تم إرسال الاستفسار! 🎉',
+    thankYou: 'شكراً لاهتمامك بـ',
+    ourTeam: 'سيتواصل معك فريقنا قريباً.',
+    submitAnother: 'إرسال استفسار آخر',
+    exploreDealDesk: 'استكشف DealDesk',
+    backToHome: 'العودة إلى الصفحة الرئيسية',
+    fullName: 'الاسم الكامل *',
+    phoneNumber: 'رقم الاتصال *',
+    emailAddress: 'البريد الإلكتروني',
+    budgetRange: 'نطاق الميزانية',
+    submitEnquiry: 'إرسال الاستفسار',
+    submitting: 'جاري الإرسال...',
+    poweredBy: 'مشغل بواسطة',
+    selectBudget: 'اختر نطاق الميزانية...',
+    loading: 'جاري التحميل...',
+    linkNotFound: 'الرابط غير موجود',
+    linkNotFoundDesc: 'الرابط الاجتماعي الذي تبحث عنه غير موجود أو منتهي الصلاحية.',
+  },
+};
+
+// Budget ranges with values in USD (will be converted per currency)
+const BUDGET_RANGES_USD = [
+  { value: '', label: 'Select budget range...' },
+  { value: 'below-50k', label: 'Below $50K' },
+  { value: '50k-100k', label: '$50K - $100K' },
+  { value: '100k-200k', label: '$100K - $200K' },
+  { value: '200k-500k', label: '$200K - $500K' },
+  { value: '500k-1m', label: '$500K - $1M' },
+  { value: '1m-2m', label: '$1M - $2M' },
+  { value: 'above-2m', label: 'Above $2M' },
+];
+
+// Map budget value to max amount in USD for backend
+const BUDGET_VALUE_MAP = {
+  'below-50k': 50000,
+  '50k-100k': 100000,
+  '100k-200k': 200000,
+  '200k-500k': 500000,
+  '500k-1m': 1000000,
+  '1m-2m': 2000000,
+  'above-2m': 5000000,
+};
 
 export const PublicSocialForm = () => {
   const { slug } = useParams();
   const navigate = useNavigate();
   const { addToast } = useToast();
+  const { language, setLanguage } = useLanguage();
+  const { currency, setCurrency, convertPrice, formatPrice } = useCurrency();
 
   const [linkData, setLinkData] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -22,6 +110,8 @@ export const PublicSocialForm = () => {
     email: '',
     budget: '',
   });
+
+  const t = translations[language] || translations.en;
 
   useEffect(() => {
     socialLinkApi.getBySlug(slug)
@@ -45,7 +135,9 @@ export const PublicSocialForm = () => {
 
     setSubmitting(true);
     try {
-      // 🔥 Using publicLeadApi (no auth required)
+      // Convert budget range to max amount
+      const budgetMax = BUDGET_VALUE_MAP[formData.budget] || 0;
+
       await publicLeadApi.create({
         name: formData.name,
         phone: formData.phone,
@@ -54,13 +146,14 @@ export const PublicSocialForm = () => {
         sourceSocialLinkId: linkData._id,
         interestedPropertyId: linkData.propertyId?._id || linkData.propertyId,
         requirements: {
-          budgetMax: formData.budget ? parseBudget(formData.budget) : undefined,
+          budgetMax: budgetMax,
         },
         notes: `Lead from Social Link: ${linkData.projectName}`,
         status: 'New',
       });
       setSubmitted(true);
       addToast('Enquiry submitted successfully! Our team will contact you shortly.');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     } catch (err) {
       addToast(err.message || 'Failed to submit enquiry', 'error');
     } finally {
@@ -68,23 +161,58 @@ export const PublicSocialForm = () => {
     }
   };
 
-  const parseBudget = (budgetStr) => {
-    const map = {
-      'Below ₹50 Lakhs': 5000000,
-      '₹50 Lakhs - ₹1 Crore': 10000000,
-      '₹1 Crore - ₹2 Crore': 20000000,
-      '₹2 Crore - ₹5 Crore': 50000000,
-      '₹5 Crore - ₹10 Crore': 100000000,
-      '₹10 Crore+': 1000000000,
-    };
-    return map[budgetStr] || 0;
+  const resetForm = () => {
+    setFormData({ name: '', phone: '', email: '', budget: '' });
+    setSubmitted(false);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const goHome = () => {
+    const landingUrl = import.meta.env.VITE_LANDING_URL || '/';
+    window.location.href = landingUrl;
+  };
+
+  // Language and currency options
+  const languageOptions = [
+    { code: 'en', label: 'English' },
+    { code: 'hi', label: 'हिन्दी' },
+    { code: 'ar', label: 'العربية' },
+  ];
+
+  const currencyOptions = [
+    { code: 'USD', label: 'USD $' },
+    { code: 'INR', label: 'INR ₹' },
+    { code: 'AED', label: 'AED' },
+    { code: 'GBP', label: 'GBP £' },
+    { code: 'EUR', label: 'EUR €' },
+  ];
+
+  // Get currency symbol
+  const getCurrencySymbol = () => {
+    const symbols = { USD: '$', INR: '₹', AED: 'AED ', GBP: '£', EUR: '€' };
+    return symbols[currency] || '$';
+  };
+
+  // Generate budget options with current currency
+  const getBudgetOptions = () => {
+    const symbol = getCurrencySymbol();
+    return [
+      { value: '', label: t.selectBudget },
+      { value: 'below-50k', label: `Below ${symbol}50K` },
+      { value: '50k-100k', label: `${symbol}50K - ${symbol}100K` },
+      { value: '100k-200k', label: `${symbol}100K - ${symbol}200K` },
+      { value: '200k-500k', label: `${symbol}200K - ${symbol}500K` },
+      { value: '500k-1m', label: `${symbol}500K - ${symbol}1M` },
+      { value: '1m-2m', label: `${symbol}1M - ${symbol}2M` },
+      { value: 'above-2m', label: `Above ${symbol}2M` },
+    ];
   };
 
   if (loading) {
     return (
       <div className="psf-loading">
         <div className="psf-loader"></div>
-        <p>Loading...</p>
+        <p>{t.loading}</p>
       </div>
     );
   }
@@ -92,8 +220,8 @@ export const PublicSocialForm = () => {
   if (!linkData) {
     return (
       <div className="psf-error">
-        <h2>Link Not Found</h2>
-        <p>The social link you're looking for doesn't exist or has expired.</p>
+        <h2>{t.linkNotFound}</h2>
+        <p>{t.linkNotFoundDesc}</p>
       </div>
     );
   }
@@ -102,20 +230,25 @@ export const PublicSocialForm = () => {
     return (
       <div className="psf-page psf-success">
         <div className="psf-container">
-          <div className="psf-logo">
+          <div className="psf-logo clickable" onClick={goHome} title={t.backToHome}>
             <DealDeskLogo size="md" theme="dark" />
           </div>
+
           <div className="psf-success-icon">
             <FaCheckCircle />
           </div>
-          <h2>Enquiry Submitted! 🎉</h2>
-          <p>Thank you for your interest in <strong>{linkData.projectName}</strong>.</p>
-          <p className="psf-success-sub">Our team will reach out to you shortly.</p>
-          <p className="psf-success-sub">
-            <a href={`/social/${slug}`} className="psf-btn-secondary" style={{ marginTop: '12px', display: 'inline-block' }}>
-              Submit Another Enquiry
+          <h2>{t.title}</h2>
+          <p>{t.thankYou} <strong>{linkData.projectName}</strong>.</p>
+          <p className="psf-success-sub">{t.ourTeam}</p>
+
+          <div className="psf-success-actions">
+            <button className="psf-btn-secondary" onClick={resetForm}>
+              {t.submitAnother}
+            </button>
+            <a href="/" className="psf-btn-primary">
+              {t.exploreDealDesk}
             </a>
-          </p>
+          </div>
         </div>
       </div>
     );
@@ -124,8 +257,42 @@ export const PublicSocialForm = () => {
   return (
     <div className="psf-page">
       <div className="psf-container">
-        <div className="psf-logo">
-          <DealDeskLogo size="md" theme="dark" />
+        {/* Header: Logo + Selectors */}
+        <div className="psf-header-top">
+          <div className="psf-logo clickable" onClick={goHome} title={t.backToHome}>
+            <DealDeskLogo size="md" theme="dark" />
+          </div>
+          <div className="psf-header-controls">
+            <div className="psf-selector-group">
+              <FaLanguage className="psf-selector-icon" />
+              <select 
+                value={language} 
+                onChange={(e) => setLanguage(e.target.value)}
+                className="psf-select"
+              >
+                {languageOptions.map(opt => (
+                  <option key={opt.code} value={opt.code}>{opt.label}</option>
+                ))}
+              </select>
+            </div>
+            <div className="psf-selector-group">
+              <FaGlobe className="psf-selector-icon" />
+              <select 
+                value={currency} 
+                onChange={(e) => setCurrency(e.target.value)}
+                className="psf-select"
+              >
+                {currencyOptions.map(opt => (
+                  <option key={opt.code} value={opt.code}>{opt.label}</option>
+                ))}
+              </select>
+            </div>
+          </div>
+        </div>
+
+        {/* Back to Home Link */}
+        <div className="psf-back-link">
+          <FaArrowLeft /> <a href="/">{t.backToHome}</a>
         </div>
 
         <div className="psf-header">
@@ -138,7 +305,7 @@ export const PublicSocialForm = () => {
 
         <form onSubmit={handleSubmit} className="psf-form">
           <div className="psf-group">
-            <label>Full Name *</label>
+            <label>{t.fullName}</label>
             <input 
               type="text" 
               required 
@@ -149,7 +316,7 @@ export const PublicSocialForm = () => {
           </div>
 
           <div className="psf-group">
-            <label>Contact Number *</label>
+            <label>{t.phoneNumber}</label>
             <input 
               type="tel" 
               required 
@@ -160,7 +327,7 @@ export const PublicSocialForm = () => {
           </div>
 
           <div className="psf-group">
-            <label>Email Address</label>
+            <label>{t.emailAddress}</label>
             <input 
               type="email" 
               placeholder="your@email.com"
@@ -170,28 +337,24 @@ export const PublicSocialForm = () => {
           </div>
 
           <div className="psf-group">
-            <label>Budget Range</label>
+            <label>{t.budgetRange}</label>
             <select 
               value={formData.budget}
               onChange={e => setFormData({ ...formData, budget: e.target.value })}
             >
-              <option value="">Select budget range...</option>
-              <option value="Below ₹50 Lakhs">Below ₹50 Lakhs</option>
-              <option value="₹50 Lakhs - ₹1 Crore">₹50 Lakhs - ₹1 Crore</option>
-              <option value="₹1 Crore - ₹2 Crore">₹1 Crore - ₹2 Crore</option>
-              <option value="₹2 Crore - ₹5 Crore">₹2 Crore - ₹5 Crore</option>
-              <option value="₹5 Crore - ₹10 Crore">₹5 Crore - ₹10 Crore</option>
-              <option value="₹10 Crore+">₹10 Crore+</option>
+              {getBudgetOptions().map(opt => (
+                <option key={opt.value} value={opt.value}>{opt.label}</option>
+              ))}
             </select>
           </div>
 
           <button type="submit" disabled={submitting} className="psf-btn-submit">
-            {submitting ? 'Submitting...' : <><FaCheckCircle /> Submit Enquiry</>}
+            {submitting ? t.submitting : <><FaCheckCircle /> {t.submitEnquiry}</>}
           </button>
         </form>
 
         <div className="psf-footer">
-          <p>Powered by <strong>DealDesk</strong> — Real Estate CRM</p>
+          <p>{t.poweredBy} <strong>DealDesk</strong> — Real Estate CRM</p>
         </div>
       </div>
     </div>
