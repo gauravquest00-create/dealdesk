@@ -39,7 +39,7 @@ const businessSchema = new mongoose.Schema({
 
   planId: { type: String, default: 'starter' },
   billingCycle: { type: String, enum: ['monthly', 'annual'], default: 'monthly' },
-  trialEndsAt: { type: Date, required: true },
+  trialEndsAt: { type: Date }, // ✅ required hata diya
 
   supportAccessActive: { type: Boolean, default: false },
   supportAccessExpiresAt: { type: Date },
