@@ -16,6 +16,7 @@ import {
   FaHandshake,
   FaUsersCog,
   FaCog,
+  FaLink,
   FaTimes
 } from 'react-icons/fa';
 import './MobileBottomNav.css';
@@ -146,6 +147,11 @@ export const MobileBottomNav = () => {
               {(isAdmin || isPropertyAgent) && (
                 <button type="button" className="mob-drawer-link" onClick={() => handleNav('/app/qr')}>
                   <FaQrcode /> <span>Smart QR Codes</span>
+                </button>
+              )}
+                {(isAdmin || isPropertyAgent || isLeadAgent) && (
+                <button type="button" className="mob-drawer-link" onClick={() => handleNav('/app/social-links')}>
+                  <FaLink /> <span>Social Link</span>
                 </button>
               )}
               {(isAdmin || isPropertyAgent) && (
