@@ -3,9 +3,11 @@ import * as propCtrl from '../controllers/propertyController.js';
 import { authenticate } from '../middleware/auth.js';
 import { enforceBusinessScope } from '../middleware/businessScope.js';
 import { checkEntitlement } from '../middleware/entitlement.js';
+import { checkBusinessAccess } from '../middleware/checkBusinessAccess.js';
 
 const router = Router();
 router.use(authenticate, enforceBusinessScope, checkEntitlement);
+router.use(checkBusinessAccess);
 
 router.get('/', propCtrl.listProperties);
 router.post('/', propCtrl.createProperty);
