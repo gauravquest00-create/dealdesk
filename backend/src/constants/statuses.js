@@ -44,8 +44,8 @@ export const LEAD_TEMPERATURE = {
 };
 
 export const LEAD_SOURCE = {
-  SMART_QR: 'Smart QR',       
-  SMART_QR_ALT: 'SMART_QR',   
+  SMART_QR: 'Smart QR',        // ✅ Already there
+  SMART_QR_ALT: 'SMART_QR',    // ✅ ADD THIS — so both work
   OPEN_HOUSE: 'Open House',
   WEBSITE: 'Website',
   FACEBOOK: 'Facebook',
@@ -56,6 +56,7 @@ export const LEAD_SOURCE = {
   REFERRAL: 'Referral',
   SOCIAL_LINK: 'SOCIAL_LINK',
 };
+
 export const VIEWING_STATUS = {
   SCHEDULED: 'Scheduled',
   COMPLETED: 'Completed',
