@@ -14,6 +14,7 @@ import {
 } from '../services/api/services.js';
 import { useAuth } from '../context/AuthContext.jsx';
 import { useToast } from '../context/ToastContext.jsx';
+import { useCurrency } from '../context/CurrencyContext.jsx'; // ✅ Import currency context
 import { 
   FaArrowLeft, FaBuilding, FaBed, FaBath, FaRulerCombined, FaCompass, FaCouch, FaClock,
   FaMapMarkerAlt, FaMoneyBillWave, FaPercentage, FaCheckCircle, FaExclamationTriangle,
@@ -23,10 +24,26 @@ import {
 } from 'react-icons/fa';
 import './PropertyDetailPage.css';
 
+// ---- Helper to get currency symbol (same as PropertiesPage) ----
+const getCurrencySymbol = (currencyCode) => {
+  const map = {
+    USD: '$',
+    INR: '₹',
+    AED: 'AED ',
+    GBP: '£',
+    EUR: '€',
+    CAD: 'CA$',
+    AUD: 'A$',
+  };
+  return map[currencyCode] || '$';
+};
+
 export const PropertyDetailPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { addToast } = useToast();
+  // ✅ NEW: Take currency, rates from context
+  const { currency, rates } = useCurrency();
 
   const [property, setProperty] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -60,7 +77,7 @@ export const PropertyDetailPage = () => {
   const [editForm, setEditForm] = useState({});
   const [mediaForm, setMediaForm] = useState({ coverPhotoUrl: '', newPhotoUrl: '', floorPlanUrl: '' });
   
-  // Viewing Form (Correctly formatted: YYYY-MM-DD + separate HH:mm)
+  // Viewing Form
   const [viewingForm, setViewingForm] = useState({ 
     leadId: '', 
     clientName: '', 
@@ -70,7 +87,7 @@ export const PropertyDetailPage = () => {
     notes: '' 
   });
   
-  // OpenHouse Form (Uses eventDate required by model)
+  // OpenHouse Form
   const [openHouseForm, setOpenHouseForm] = useState({ 
     title: 'Exclusive Weekend Open House Preview', 
     eventDate: new Date(Date.now() + 259200000).toISOString().split('T')[0], 
@@ -96,7 +113,7 @@ export const PropertyDetailPage = () => {
     status: 'Verified' 
   });
   
-  // Deal Form (Valid DEAL_STAGE: 'New', 'Qualified', 'Viewing', 'Offer/Negotiation', 'Won', 'Lost')
+  // Deal Form
   const [dealForm, setDealForm] = useState({ 
     leadId: '', 
     clientName: '', 
@@ -106,6 +123,33 @@ export const PropertyDetailPage = () => {
     commissionPercent: 2.0, 
     expectedCloseDate: new Date(Date.now() + 1209600000).toISOString().split('T')[0] 
   });
+
+  // ---- NEW: Helper to display price with conversion ----
+  const getDisplayPrice = (amount, propCurrency = 'USD') => {
+    const targetCurrency = currency;
+    const val = amount || 0;
+    
+    // If no amount, return '—'
+    if (!val) return '—';
+    
+    // If same currency, just show with symbol
+    if (propCurrency === targetCurrency) {
+      const symbol = getCurrencySymbol(propCurrency);
+      return `${symbol}${val.toLocaleString()}`;
+    }
+    
+    // If rates not loaded or missing, fallback to property's native display
+    if (!rates[propCurrency] || !rates[targetCurrency]) {
+      const symbol = getCurrencySymbol(propCurrency);
+      return `${symbol}${val.toLocaleString()}`;
+    }
+    
+    // Convert: property currency → USD → target currency
+    const usdAmount = val / rates[propCurrency];
+    const converted = usdAmount * rates[targetCurrency];
+    const symbol = getCurrencySymbol(targetCurrency);
+    return `${symbol}${Math.round(converted).toLocaleString()}`;
+  };
 
   const loadPropertyData = () => {
     setLoading(true);
@@ -207,7 +251,6 @@ export const PropertyDetailPage = () => {
         reader.readAsDataURL(file);
         const base64Data = await base64Promise;
 
-        // Upload to Cloudinary via backend endpoint
         const res = await uploadApi.upload(base64Data, 'dealdesk/properties');
         const uploadedUrl = res.data?.url;
 
@@ -305,7 +348,7 @@ export const PropertyDetailPage = () => {
     }
   };
 
-  // Schedule Viewing (sends clean date + time + optional leadId or manual clientName)
+  // Schedule Viewing
   const handleScheduleViewing = async (e) => {
     e.preventDefault();
     try {
@@ -324,7 +367,7 @@ export const PropertyDetailPage = () => {
     } catch (err) { addToast(err.message || 'Failed to schedule viewing', 'error'); }
   };
 
-  // Create Open House (sends required eventDate field)
+  // Create Open House
   const handleCreateOpenHouse = async (e) => {
     e.preventDefault();
     try {
@@ -369,7 +412,7 @@ export const PropertyDetailPage = () => {
     } catch (err) { addToast(err.message, 'error'); }
   };
 
-  // Create Deal (sends valid enum stage and ensures leadId)
+  // Create Deal
   const handleCreateDeal = async (e) => {
     e.preventDefault();
     try {
@@ -426,7 +469,8 @@ export const PropertyDetailPage = () => {
 
         <div className="pdp-header-right">
           <div className="pdp-price-badge-box">
-            <span className="pdp-price-val">${property.askingPrice?.toLocaleString()}</span>
+            {/* ✅ FIX: Use getDisplayPrice with property.currency */}
+            <span className="pdp-price-val">{getDisplayPrice(property.askingPrice, property.currency || 'USD')}</span>
             {property.isNegotiable && <span className="pdp-negotiable-tag">Negotiable</span>}
           </div>
           <div className="pdp-header-actions">
@@ -449,7 +493,7 @@ export const PropertyDetailPage = () => {
               <div className="pdp-replacements-chips">
                 <span>Active Replacements:</span>
                 {replacements.map(r => (
-                  <Link key={r._id} to={`/app/properties/${r._id}`} className="pdp-rep-chip">{r.projectName} ({r.propertyCode}) - ${r.askingPrice?.toLocaleString()}</Link>
+                  <Link key={r._id} to={`/app/properties/${r._id}`} className="pdp-rep-chip">{r.projectName} ({r.propertyCode}) - {getDisplayPrice(r.askingPrice, r.currency || 'USD')}</Link>
                 ))}
               </div>
             )}
@@ -457,7 +501,7 @@ export const PropertyDetailPage = () => {
         </div>
       )}
 
-      {/* Tabs Bar (8 Working Tabs) */}
+      {/* Tabs Bar */}
       <div className="pdp-tabs-container">
         <button type="button" className={`pdp-tab-nav-btn ${activeTab === 'overview' ? 'active' : ''}`} onClick={() => setActiveTab('overview')}><FaBuilding /> Overview & Specs</button>
         <button type="button" className={`pdp-tab-nav-btn ${activeTab === 'viewings' ? 'active' : ''}`} onClick={() => setActiveTab('viewings')}><FaCalendarAlt /> Private Viewings ({property.viewings?.length || 0})</button>
@@ -521,10 +565,11 @@ export const PropertyDetailPage = () => {
             <div className="pdp-card pdp-financials-card">
               <h3>Commercial Terms</h3>
               <div className="pdp-fin-rows">
-                <div className="pdp-fin-row"><span>Asking Price</span><strong className="pdp-fin-price">${property.askingPrice?.toLocaleString()}</strong></div>
+                {/* ✅ FIX: Asking Price with conversion */}
+                <div className="pdp-fin-row"><span>Asking Price</span><strong className="pdp-fin-price">{getDisplayPrice(property.askingPrice, property.currency || 'USD')}</strong></div>
                 <div className="pdp-fin-row"><span>Negotiation</span><span>{property.isNegotiable ? 'Negotiable for genuine buyer' : 'Fixed Price'}</span></div>
-                <div className="pdp-fin-row"><span>Monthly Maintenance</span><span>${property.monthlyMaintenance || 250}/mo</span></div>
-                <div className="pdp-fin-row"><span>Brokerage Commission</span><span>2.0% (${Math.round((property.askingPrice || 0) * 0.02).toLocaleString()})</span></div>
+                <div className="pdp-fin-row"><span>Monthly Maintenance</span><span>{getDisplayPrice(property.monthlyMaintenance || 250, property.currency || 'USD')}/mo</span></div>
+                <div className="pdp-fin-row"><span>Brokerage Commission</span><span>{property.commissionPercent || 2.0}% ({getDisplayPrice(Math.round((property.askingPrice || 0) * (property.commissionPercent || 2.0) / 100), property.currency || 'USD')})</span></div>
                 <div className="pdp-fin-row"><span>Expected ROI</span><span className="pdp-roi-badge">{property.expectedRoiPct || 6.5}% p.a.</span></div>
               </div>
             </div>
@@ -687,7 +732,6 @@ export const PropertyDetailPage = () => {
                       <td>{l.status || 'New'}</td>
                       <td>
                         <div className="pdp-lead-actions-row">
-                          {/* View Lead Button (Navigates to Lead or opens quick preview) */}
                           <button 
                             type="button" 
                             className="pdp-btn-view-lead" 
@@ -696,7 +740,6 @@ export const PropertyDetailPage = () => {
                           >
                             <FaEye /> View Lead
                           </button>
-                          {/* WhatsApp Chat Button */}
                           <a 
                             href={`https://wa.me/${(l.phone || '').replace(/[^0-9]/g, '')}?text=${encodeURIComponent(`Hi ${l.name}, following up regarding ${property.projectName} (${property.propertyCode}).`)}`} 
                             target="_blank" 
@@ -731,7 +774,7 @@ export const PropertyDetailPage = () => {
             <div className="pdp-empty-tab-box">
               <FaBolt className="empty-icon" />
               <h4>No high-probability matches for this listing yet</h4>
-              <p>When new buyer leads enter requirements matching {property.configuration} or ${property.askingPrice?.toLocaleString()} budget, they will auto-populate here.</p>
+              <p>When new buyer leads enter requirements matching {property.configuration} or {getDisplayPrice(property.askingPrice, property.currency || 'USD')} budget, they will auto-populate here.</p>
             </div>
           ) : (
             <div className="pdp-matches-list">
@@ -818,8 +861,8 @@ export const PropertyDetailPage = () => {
                   {property.deals.map(d => (
                     <tr key={d._id}>
                       <td><strong>{d.title || 'Deal Offer'}</strong></td>
-                      <td><strong className="pdp-deal-val">${d.dealValue?.toLocaleString()}</strong></td>
-                      <td>{d.commissionPercent || 2.0}% (${d.commissionValue?.toLocaleString() || Math.round((d.dealValue || 0) * 0.02).toLocaleString()})</td>
+                      <td><strong className="pdp-deal-val">{getDisplayPrice(d.dealValue, property.currency || 'USD')}</strong></td>
+                      <td>{d.commissionPercent || 2.0}% ({getDisplayPrice(d.commissionValue || Math.round((d.dealValue || 0) * (d.commissionPercent || 2.0) / 100), property.currency || 'USD')})</td>
                       <td><span className="pdp-status-pill available">{d.stage || 'Offer/Negotiation'}</span></td>
                       <td>{d.expectedClosingDate ? new Date(d.expectedClosingDate).toLocaleDateString() : 'Pending'}</td>
                     </tr>
@@ -894,7 +937,7 @@ export const PropertyDetailPage = () => {
         </div>
       )}
 
-      {/* MODAL 2: MANAGE MEDIA (DRAG & DROP TO CLOUDINARY + DIRECT URLS) */}
+      {/* MODAL 2: MANAGE MEDIA */}
       {showMediaModal && (
         <div className="pdp-modal-backdrop" onClick={() => setShowMediaModal(false)}>
           <div className="pdp-modal-box" onClick={e => e.stopPropagation()}>
@@ -904,7 +947,6 @@ export const PropertyDetailPage = () => {
             </div>
 
             <div className="pdp-modal-form">
-              {/* CLOUDINARY DRAG & DROP UPLOAD ZONE */}
               <div className="pdp-form-group">
                 <label>Drag & Drop Images from Computer to Upload (Cloudinary)</label>
                 <div 
@@ -937,7 +979,6 @@ export const PropertyDetailPage = () => {
                 </div>
               </div>
 
-              {/* Upload Floor Plan */}
               <div className="pdp-form-group">
                 <label>Upload Floor Plan Document / Image</label>
                 <div className="pdp-file-row">
@@ -964,13 +1005,11 @@ export const PropertyDetailPage = () => {
                 </div>
               </div>
 
-              {/* Cover Photo URL input */}
               <div className="pdp-form-group">
                 <label>Primary Cover Image URL</label>
                 <input type="url" value={mediaForm.coverPhotoUrl} onChange={e => setMediaForm({ ...mediaForm, coverPhotoUrl: e.target.value })} />
               </div>
 
-              {/* Current Photos Gallery Grid */}
               <div className="pdp-photos-reorder-box">
                 <span className="lbl">Current Gallery Photos ({property.photos?.length || 0})</span>
                 <div className="pdp-media-thumbs-grid">
@@ -1006,7 +1045,7 @@ export const PropertyDetailPage = () => {
         </div>
       )}
 
-      {/* MODAL 4: VIEWING (Correctly formatted: YYYY-MM-DD + separate HH:mm) */}
+      {/* MODAL 4: VIEWING */}
       {showViewingModal && (
         <div className="pdp-modal-backdrop" onClick={() => setShowViewingModal(false)}>
           <div className="pdp-modal-box" onClick={e => e.stopPropagation()}>
@@ -1051,7 +1090,7 @@ export const PropertyDetailPage = () => {
         </div>
       )}
 
-      {/* MODAL 5: OPEN HOUSE (Sends required eventDate) */}
+      {/* MODAL 5: OPEN HOUSE */}
       {showOpenHouseModal && (
         <div className="pdp-modal-backdrop" onClick={() => setShowOpenHouseModal(false)}>
           <div className="pdp-modal-box" onClick={e => e.stopPropagation()}>
@@ -1109,7 +1148,7 @@ export const PropertyDetailPage = () => {
         </div>
       )}
 
-      {/* MODAL 8: RECORD DEAL (Valid stage enum and lead association) */}
+      {/* MODAL 8: RECORD DEAL */}
       {showDealModal && (
         <div className="pdp-modal-backdrop" onClick={() => setShowDealModal(false)}>
           <div className="pdp-modal-box" onClick={e => e.stopPropagation()}>
@@ -1172,7 +1211,7 @@ export const PropertyDetailPage = () => {
         </div>
       )}
 
-      {/* MODAL 9: VIEW LEAD DETAILS CARD */}
+      {/* MODAL 9: VIEW LEAD DETAILS */}
       {selectedLeadForDetail && (
         <div className="pdp-modal-backdrop" onClick={() => setSelectedLeadForDetail(null)}>
           <div className="pdp-modal-box" onClick={e => e.stopPropagation()}>
@@ -1239,6 +1278,7 @@ export const PropertyDetailPage = () => {
           </div>
         </div>
       )}
+
       {/* MODAL: ASSIGN PROPERTY ADVISOR */}
       {showAssignModal && (
         <div className="pdp-modal-backdrop" onClick={() => setShowAssignModal(false)}>
