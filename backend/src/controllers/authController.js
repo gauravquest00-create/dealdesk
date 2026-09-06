@@ -2,6 +2,7 @@ import * as authService from '../services/authService.js';
 import User from '../models/User.js';
 import Business from '../models/Business.js';
 import { hashPassword } from '../utils/hash.js';
+import { ENTITLEMENT_STATUS } from '../constants/statuses.js';
 
 export const signup = async (req, res, next) => {
   try {
@@ -26,6 +27,18 @@ export const signup = async (req, res, next) => {
       return res.status(400).json({ success: false, message: 'Missing required signup fields', code: 'VALIDATION_ERROR' });
     }
 
+    // ✅ Compute trialEndsAt: 3 days from now (only if not paid)
+    let trialEndsAt = null;
+    let entitlementStatus = ENTITLEMENT_STATUS.ACTIVE_SUBSCRIPTION;
+    let trialStatus = null;
+
+    if (!isPaid) {
+      trialEndsAt = new Date(Date.now() + 3 * 24 * 60 * 60 * 1000);
+      entitlementStatus = ENTITLEMENT_STATUS.TRIAL_ACTIVE;
+      trialStatus = 'ACTIVE';
+    }
+
+    // ✅ Pass trialEndsAt to service
     const result = await authService.registerBusinessAndAdmin({
       businessName,
       fullName,
@@ -37,10 +50,13 @@ export const signup = async (req, res, next) => {
       currency,
       timezone,
       phone,
-      planId,
-      billingCycle,
-      isPaid,
+      planId: planId || 'starter',
+      billingCycle: billingCycle || 'monthly',
+      isPaid: isPaid || false,
       paymentDetails,
+      trialEndsAt, // ✅ Pass along
+      entitlementStatus,
+      trialStatus,
     });
 
     res.status(201).json({
@@ -52,6 +68,8 @@ export const signup = async (req, res, next) => {
     next(err);
   }
 };
+
+// ... rest of authController (login, me, changePassword) unchanged
 
 export const login = async (req, res, next) => {
   try {
