@@ -147,20 +147,26 @@ const translations = {
   },
 };
 
-const BUDGET_OPTIONS = [
-  { value: 'under-50k', label: 'Under $50K' },
-  { value: '50k-100k', label: '$50K - $100K' },
-  { value: '100k-200k', label: '$100K - $200K' },
-  { value: '200k-500k', label: '$200K - $500K' },
-  { value: '500k-1m', label: '$500K - $1M' },
-  { value: '1m-2m', label: '$1M - $2M' },
-  { value: 'above-2m', label: 'Above $2M' },
-];
+// ---- Helper to get currency symbol ----
+const getCurrencySymbol = (currencyCode) => {
+  const map = {
+    USD: '$',
+    INR: '₹',
+    AED: 'AED ',
+    GBP: '£',
+    EUR: '€',
+    CAD: 'CA$',
+    AUD: 'A$',
+  };
+  return map[currencyCode] || '$';
+};
 
 export const PublicQRResolver = () => {
   const { qrId } = useParams();
   const { language, setLanguage } = useLanguage();
-  const { currency, setCurrency, formatPrice } = useCurrency();
+  // ✅ NEW: Take currency, rates from context
+ const { currency, setCurrency, rates, formatPrice } = useCurrency();
+
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [showEnquiryModal, setShowEnquiryModal] = useState(false);
@@ -180,6 +186,33 @@ export const PublicQRResolver = () => {
   const goHome = () => {
     const landingUrl = import.meta.env.VITE_LANDING_URL || '/';
     window.location.href = landingUrl;
+  };
+
+  // ---- NEW: Helper to display price with conversion (same as PropertiesPage) ----
+  const getDisplayPrice = (amount, propCurrency = 'USD') => {
+    const targetCurrency = currency;
+    const val = amount || 0;
+
+    // If no amount, return '—'
+    if (!val) return '—';
+
+    // If same currency, just show with symbol
+    if (propCurrency === targetCurrency) {
+      const symbol = getCurrencySymbol(propCurrency);
+      return `${symbol}${val.toLocaleString()}`;
+    }
+
+    // If rates not loaded or missing, fallback to property's native display
+    if (!rates[propCurrency] || !rates[targetCurrency]) {
+      const symbol = getCurrencySymbol(propCurrency);
+      return `${symbol}${val.toLocaleString()}`;
+    }
+
+    // Convert: property currency → USD → target currency
+    const usdAmount = val / rates[propCurrency];
+    const converted = usdAmount * rates[targetCurrency];
+    const symbol = getCurrencySymbol(targetCurrency);
+    return `${symbol}${Math.round(converted).toLocaleString()}`;
   };
 
   useEffect(() => {
@@ -268,6 +301,20 @@ export const PublicQRResolver = () => {
 
   const defaultWhatsappMessage = `Hi ${advisorName}, I scanned the Smart QR code (${qrId}) for ${prop?.projectName} (${prop?.propertyCode}). I am interested and would like to schedule a private viewing.`;
 
+  // ---- Generate budget options dynamically with currency symbol ----
+  const getBudgetOptions = () => {
+    const symbol = getCurrencySymbol(currency);
+    return [
+      { value: 'under-50k', label: `Under ${symbol}50K` },
+      { value: '50k-100k', label: `${symbol}50K - ${symbol}100K` },
+      { value: '100k-200k', label: `${symbol}100K - ${symbol}200K` },
+      { value: '200k-500k', label: `${symbol}200K - ${symbol}500K` },
+      { value: '500k-1m', label: `${symbol}500K - ${symbol}1M` },
+      { value: '1m-2m', label: `${symbol}1M - ${symbol}2M` },
+      { value: 'above-2m', label: `Above ${symbol}2M` },
+    ];
+  };
+
   return (
     <div className="public-qr-page">
       {/* Header */}
@@ -346,7 +393,8 @@ export const PublicQRResolver = () => {
                 <p className="property-address">{prop?.address}</p>
               </div>
               <div className="price-box">
-                <span className="price-amount">{formatPrice(prop?.askingPrice)}</span>
+                {/* 🔥 FIX: Use getDisplayPrice with property currency */}
+                <span className="price-amount">{getDisplayPrice(prop?.askingPrice, prop?.currency || 'USD')}</span>
                 {prop?.isNegotiable && <span className="negotiable-pill">{t.negotiable}</span>}
               </div>
             </div>
@@ -518,7 +566,6 @@ export const PublicQRResolver = () => {
                   <button className="btn-finish btn-submit-another" onClick={resetForm}>
                     Submit Another Enquiry
                   </button>
-                  {/* ---- Explore DealDesk button ---- */}
                   <button className="btn-finish" onClick={goHome}>
                     Explore DealDesk
                   </button>
@@ -565,7 +612,7 @@ export const PublicQRResolver = () => {
                     onChange={e => setFormData({ ...formData, budget: e.target.value })}
                   >
                     <option value="">Select budget range</option>
-                    {BUDGET_OPTIONS.map(opt => (
+                    {getBudgetOptions().map(opt => (
                       <option key={opt.value} value={opt.value}>{opt.label}</option>
                     ))}
                   </select>
