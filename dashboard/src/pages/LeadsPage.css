@@ -845,3 +845,273 @@
   max-width: 100%;
   box-sizing: border-box;
 }
+
+/* ============================================================
+   MOBILE FILTER & SEARCH (≤ 763px)
+   ============================================================ */
+
+@media (max-width: 763px) {
+  /* Hide desktop filters */
+  .ld-filters {
+    display: none !important;
+  }
+
+  /* Mobile filter actions */
+  .ld-filters-mobile {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 4px 0;
+  }
+
+  .ld-mobile-filter-actions {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+
+  .ld-mobile-icon-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    border: 1px solid var(--color-border, #e2e8f0);
+    background: var(--color-surface, #ffffff);
+    color: var(--color-text-muted, #64748b);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 1rem;
+    position: relative;
+  }
+
+  .ld-mobile-icon-btn:hover {
+    border-color: var(--color-primary, #2563eb);
+    color: var(--color-primary, #2563eb);
+  }
+
+  .ld-mobile-icon-btn.active {
+    border-color: var(--color-primary, #2563eb);
+    color: var(--color-primary, #2563eb);
+    background: var(--color-primary-light, #dbeafe);
+  }
+
+  /* Filter dot indicator */
+  .ld-filter-dot {
+    position: absolute;
+    top: -2px;
+    right: -2px;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--color-primary, #2563eb);
+    border: 2px solid var(--color-surface, #ffffff);
+  }
+
+  /* Mobile Search Expand */
+  .ld-mobile-search-expand {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    animation: ldSlideDown 0.2s ease;
+    padding: 4px 0;
+  }
+
+  @keyframes ldSlideDown {
+    from { opacity: 0; transform: translateY(-8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .ld-mobile-search-expand input {
+    flex: 1;
+    padding: 8px 12px;
+    border: 1px solid var(--color-border, #e2e8f0);
+    border-radius: 8px;
+    font-size: 0.875rem;
+    background: var(--color-bg, #f8fafc);
+    color: var(--color-text-main, #0f172a);
+    outline: none;
+    transition: border-color 0.15s;
+  }
+
+  .ld-mobile-search-expand input:focus {
+    border-color: var(--color-primary, #2563eb);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.06);
+  }
+
+  .ld-mobile-search-clear {
+    background: transparent;
+    border: none;
+    color: var(--color-text-muted, #94a3b8);
+    cursor: pointer;
+    padding: 4px 8px;
+    font-size: 1rem;
+  }
+
+  .ld-mobile-search-clear:hover {
+    color: var(--color-text-main, #0f172a);
+  }
+}
+
+/* ============================================================
+   FILTER BOTTOM SHEET
+   ============================================================ */
+
+.ld-filter-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.4);
+  backdrop-filter: blur(2px);
+  z-index: 9998;
+  animation: ldFadeIn 0.2s ease;
+}
+
+@keyframes ldFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.ld-filter-sheet {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: var(--color-surface, #ffffff);
+  border-radius: 16px 16px 0 0;
+  box-shadow: 0 -8px 40px rgba(0, 0, 0, 0.12);
+  z-index: 9999;
+  max-height: 60vh;
+  display: flex;
+  flex-direction: column;
+  animation: ldSlideUp 0.3s ease;
+  padding: 0 20px 20px;
+}
+
+@keyframes ldSlideUp {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
+.ld-filter-sheet-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 0 12px;
+  border-bottom: 1px solid var(--color-border, #e2e8f0);
+  flex-shrink: 0;
+}
+
+.ld-filter-sheet-header h3 {
+  font-size: 1.0625rem;
+  font-weight: 700;
+  color: var(--color-text-main, #0f172a);
+  margin: 0;
+}
+
+.ld-filter-sheet-close {
+  background: transparent;
+  border: none;
+  color: var(--color-text-muted, #94a3b8);
+  font-size: 1.25rem;
+  cursor: pointer;
+  padding: 4px;
+}
+
+.ld-filter-sheet-close:hover {
+  color: var(--color-text-main, #0f172a);
+}
+
+.ld-filter-sheet-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.ld-filter-sheet-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.ld-filter-sheet-group label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--color-text-main, #0f172a);
+}
+
+.ld-filter-sheet-group select {
+  padding: 8px 12px;
+  border: 1px solid var(--color-border, #e2e8f0);
+  border-radius: 8px;
+  font-size: 0.875rem;
+  background: var(--color-bg, #f8fafc);
+  color: var(--color-text-main, #0f172a);
+  outline: none;
+  width: 100%;
+}
+
+.ld-filter-sheet-group select:focus {
+  border-color: var(--color-primary, #2563eb);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.06);
+}
+
+.ld-filter-sheet-clear {
+  background: transparent;
+  border: none;
+  color: var(--color-primary, #2563eb);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 6px 0;
+  text-align: left;
+  transition: color 0.15s;
+}
+
+.ld-filter-sheet-clear:hover {
+  color: var(--color-primary-dark, #1d4ed8);
+  text-decoration: underline;
+}
+
+.ld-filter-sheet-footer {
+  padding-top: 12px;
+  border-top: 1px solid var(--color-border, #e2e8f0);
+  flex-shrink: 0;
+}
+
+.ld-filter-sheet-apply {
+  width: 100%;
+  padding: 12px;
+  background: var(--color-primary, #2563eb);
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.9375rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.ld-filter-sheet-apply:hover {
+  background: var(--color-primary-dark, #1d4ed8);
+  transform: translateY(-1px);
+}
+
+/* ============================================================
+   DESKTOP - Hide mobile elements
+   ============================================================ */
+
+@media (min-width: 764px) {
+  .ld-filters-mobile {
+    display: none !important;
+  }
+  .ld-filter-backdrop {
+    display: none !important;
+  }
+  .ld-filter-sheet {
+    display: none !important;
+  }
+}
