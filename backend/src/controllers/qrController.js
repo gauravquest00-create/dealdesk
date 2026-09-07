@@ -7,6 +7,7 @@ import { generateRandomString } from '../utils/hash.js';
 // ============================================================
 // RESOLVE QR (Public)
 // ============================================================
+
 export const resolveQR = async (req, res, next) => {
   try {
     const { qrId } = req.params;
@@ -19,12 +20,18 @@ export const resolveQR = async (req, res, next) => {
     qr.scanCount = (qr.scanCount || 0) + 1;
     await qr.save();
 
-    // Check if current property is available
+    // Get property and populate business
     const property = qr.currentPropertyId;
+    let business = null;
     let fallbackProperties = [];
     let showFallback = false;
 
     if (property) {
+      // Populate business details from property
+      await property.populate('businessId');
+      business = property.businessId;
+
+      // Check if property is sold/unavailable
       if (property.status === 'Sold' || property.status === 'Under Offer' || property.status === 'Rented') {
         showFallback = true;
         // Find alternative properties in same project
@@ -33,8 +40,15 @@ export const resolveQR = async (req, res, next) => {
           projectName: property.projectName,
           status: 'Available',
           isActive: true,
-        }).limit(5).select('projectName propertyCode configuration askingPrice photos');
+        }).limit(5).select('projectName propertyCode configuration askingPrice photos address bedrooms bathrooms sizeSqFt currency isNegotiable');
       }
+    }
+
+    // If no property but QR might have businessId directly? (optional)
+    if (!business && qr.businessId) {
+      // If QR has businessId stored, populate it
+      await qr.populate('businessId');
+      business = qr.businessId;
     }
 
     res.json({
@@ -44,6 +58,11 @@ export const resolveQR = async (req, res, next) => {
         property: property || null,
         fallbackProperties: showFallback ? fallbackProperties : [],
         isFallback: showFallback,
+        business: business, // ✅ NOW INCLUDED
+        // Also pass projectName for fallback
+        projectName: property?.projectName || null,
+        projectDescription: property?.description || null,
+        advisor: property?.assignedAgentId || null, // optionally populate if needed
       }
     });
   } catch (err) {
