@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { leadApi, propertyApi, billingApi } from '../services/api/services.js';
 import { useToast } from '../context/ToastContext.jsx';
@@ -22,7 +22,10 @@ import {
   FaWhatsapp,
   FaEye,
   FaTimes,
-  FaBuilding
+  FaBuilding,
+  FaFilter,
+  FaChevronLeft,
+  FaSlidersH
 } from 'react-icons/fa';
 import './LeadsPage.css';
 
@@ -40,6 +43,11 @@ export const LeadsPage = () => {
   const [properties, setProperties] = useState([]);
   const [selectedLeadDetail, setSelectedLeadDetail] = useState(null);
 
+  // Mobile UI states
+  const [isMobileSearchOpen, setIsMobileSearchOpen] = useState(false);
+  const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 763);
+
   // Limit & upgrade states
   const [leadLimitExceeded, setLeadLimitExceeded] = useState(false);
   const [limitInfo, setLimitInfo] = useState(null);
@@ -50,11 +58,24 @@ export const LeadsPage = () => {
     name: '',
     phone: '',
     email: '',
-    source: 'Manual', // ✅ FIXED: 'Manual' instead of 'MANUAL'
+    source: 'Manual',
     interestedPropertyId: '',
     budgetMax: 500000,
     notes: '',
   });
+
+  // Mobile detection
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 763);
+      if (window.innerWidth > 763) {
+        setIsMobileSearchOpen(false);
+        setIsMobileFilterOpen(false);
+      }
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   // ============================================================
   // LOAD DATA & CHECK LIMIT
@@ -118,11 +139,10 @@ export const LeadsPage = () => {
     } catch (error) {}
 
     try {
-      // ✅ FIX: Convert empty interestedPropertyId to null to avoid ObjectId cast error
       const payload = {
         ...formData,
         interestedPropertyId: formData.interestedPropertyId || null,
-        source: 'Manual', // ✅ Ensure 'Manual' (matches enum)
+        source: 'Manual',
       };
       await leadApi.create(payload);
       addToast('Lead recorded with initial baseline score');
@@ -170,6 +190,30 @@ export const LeadsPage = () => {
       case 'Manual': return 'Manual Entry';
       default: return source || 'Manual';
     }
+  };
+
+  // ============================================================
+  // HANDLERS - Mobile Search & Filter
+  // ============================================================
+  const handleMobileSearchToggle = () => {
+    setIsMobileSearchOpen(!isMobileSearchOpen);
+    if (isMobileFilterOpen) setIsMobileFilterOpen(false);
+  };
+
+  const handleMobileFilterToggle = () => {
+    setIsMobileFilterOpen(!isMobileFilterOpen);
+    if (isMobileSearchOpen) setIsMobileSearchOpen(false);
+  };
+
+  const handleFilterClose = () => {
+    setIsMobileFilterOpen(false);
+  };
+
+  const handleClearFilters = () => {
+    setStatusFilter('');
+    setTempFilter('');
+    setSearch('');
+    setIsMobileFilterOpen(false);
   };
 
   // ============================================================
@@ -242,37 +286,134 @@ export const LeadsPage = () => {
         )}
       </div>
 
-      {/* Filters */}
-      <div className="ld-filters">
-        <div className="ld-search">
-          <FaSearch className="ld-search-icon" />
-          <input 
-            type="text" 
-            placeholder="Search by name, phone, or email..." 
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            onKeyDown={(e) => e.key === 'Enter' && loadLeads()}
-          />
+      {/* Filters - Desktop */}
+      {!isMobile && (
+        <div className="ld-filters">
+          <div className="ld-search">
+            <FaSearch className="ld-search-icon" />
+            <input 
+              type="text" 
+              placeholder="Search by name, phone, or email..." 
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              onKeyDown={(e) => e.key === 'Enter' && loadLeads()}
+            />
+          </div>
+          <div className="ld-filter-group">
+            <select value={tempFilter} onChange={e => setTempFilter(e.target.value)}>
+              <option value="">All Temperatures</option>
+              <option value="Hot">🔥 Hot</option>
+              <option value="Warm">☀️ Warm</option>
+              <option value="Cold">❄️ Cold</option>
+            </select>
+            <select value={statusFilter} onChange={e => setStatusFilter(e.target.value)}>
+              <option value="">All Statuses</option>
+              <option value="New">New</option>
+              <option value="Contacted">Contacted</option>
+              <option value="Qualified">Qualified</option>
+              <option value="Viewing Scheduled">Viewing Scheduled</option>
+              <option value="Viewing Completed">Viewing Completed</option>
+              <option value="Negotiation">Negotiation</option>
+              <option value="Won">Won</option>
+            </select>
+          </div>
         </div>
-        <div className="ld-filter-group">
-          <select value={tempFilter} onChange={e => setTempFilter(e.target.value)}>
-            <option value="">All Temperatures</option>
-            <option value="Hot">🔥 Hot</option>
-            <option value="Warm">☀️ Warm</option>
-            <option value="Cold">❄️ Cold</option>
-          </select>
-          <select value={statusFilter} onChange={e => setStatusFilter(e.target.value)}>
-            <option value="">All Statuses</option>
-            <option value="New">New</option>
-            <option value="Contacted">Contacted</option>
-            <option value="Qualified">Qualified</option>
-            <option value="Viewing Scheduled">Viewing Scheduled</option>
-            <option value="Viewing Completed">Viewing Completed</option>
-            <option value="Negotiation">Negotiation</option>
-            <option value="Won">Won</option>
-          </select>
+      )}
+
+      {/* Filters - Mobile (Icons only) */}
+      {isMobile && (
+        <div className="ld-filters-mobile">
+          <div className="ld-mobile-filter-actions">
+            {/* Search Icon */}
+            <button 
+              className={`ld-mobile-icon-btn ${isMobileSearchOpen ? 'active' : ''}`}
+              onClick={handleMobileSearchToggle}
+              title="Search"
+            >
+              {isMobileSearchOpen ? <FaChevronLeft /> : <FaSearch />}
+            </button>
+
+            {/* Filter Icon */}
+            <button 
+              className={`ld-mobile-icon-btn ${isMobileFilterOpen ? 'active' : ''}`}
+              onClick={handleMobileFilterToggle}
+              title="Filter"
+            >
+              <FaFilter />
+              {(tempFilter || statusFilter) && <span className="ld-filter-dot"></span>}
+            </button>
+          </div>
+
+          {/* Mobile Search Expand */}
+          {isMobileSearchOpen && (
+            <div className="ld-mobile-search-expand">
+              <input 
+                type="text" 
+                placeholder="Search leads..." 
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                onKeyDown={(e) => e.key === 'Enter' && loadLeads()}
+                autoFocus
+              />
+              {search && (
+                <button 
+                  className="ld-mobile-search-clear"
+                  onClick={() => setSearch('')}
+                >
+                  <FaTimes />
+                </button>
+              )}
+            </div>
+          )}
         </div>
-      </div>
+      )}
+
+      {/* Mobile Filter Bottom Sheet */}
+      {isMobile && isMobileFilterOpen && (
+        <>
+          <div className="ld-filter-backdrop" onClick={handleFilterClose}></div>
+          <div className="ld-filter-sheet">
+            <div className="ld-filter-sheet-header">
+              <h3>Filter Leads</h3>
+              <button className="ld-filter-sheet-close" onClick={handleFilterClose}>
+                <FaTimes />
+              </button>
+            </div>
+            <div className="ld-filter-sheet-body">
+              <div className="ld-filter-sheet-group">
+                <label>Temperature</label>
+                <select value={tempFilter} onChange={e => setTempFilter(e.target.value)}>
+                  <option value="">All Temperatures</option>
+                  <option value="Hot">🔥 Hot</option>
+                  <option value="Warm">☀️ Warm</option>
+                  <option value="Cold">❄️ Cold</option>
+                </select>
+              </div>
+              <div className="ld-filter-sheet-group">
+                <label>Status</label>
+                <select value={statusFilter} onChange={e => setStatusFilter(e.target.value)}>
+                  <option value="">All Statuses</option>
+                  <option value="New">New</option>
+                  <option value="Contacted">Contacted</option>
+                  <option value="Qualified">Qualified</option>
+                  <option value="Viewing Scheduled">Viewing Scheduled</option>
+                  <option value="Viewing Completed">Viewing Completed</option>
+                  <option value="Negotiation">Negotiation</option>
+                  <option value="Won">Won</option>
+                </select>
+              </div>
+              <button className="ld-filter-sheet-clear" onClick={handleClearFilters}>
+                Clear All Filters
+              </button>
+            </div>
+            <div className="ld-filter-sheet-footer">
+              <button className="ld-filter-sheet-apply" onClick={handleFilterClose}>
+                Apply Filters
+              </button>
+            </div>
+          </div>
+        </>
+      )}
 
       {/* Leads List */}
       {loading ? (
