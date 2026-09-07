@@ -21,6 +21,8 @@ import { PublicQRResolver } from './pages/PublicQRResolver.jsx';
 import { PublicOpenHouseReg } from './pages/PublicOpenHouseReg.jsx';
 import { PublicSocialForm } from './pages/PublicSocialForm.jsx';
 import { SocialLinksPage } from './pages/SocialLinksPage.jsx';
+import { RequirePropertyAccess } from './components/RequirePropertyAccess';
+import { AccessDenied } from './pages/AccessDenied.jsx';
 
 const RequireAuth = ({ children }) => {
   const { user, loading } = useAuth();
@@ -69,7 +71,12 @@ export const App = () => {
       >
         <Route index element={<DashboardOverview />} />
         <Route path="properties" element={<PropertiesPage />} />
-        <Route path="properties/:id" element={<PropertyDetailPage />} />
+        
+		<Route path="properties/:id" element={
+  <RequirePropertyAccess>
+    <PropertyDetailPage />
+  </RequirePropertyAccess>
+} />
         <Route path="leads" element={<LeadsPage />} />
         <Route path="leads/:id" element={<LeadDetailPage />} />
         <Route path="matches" element={<SmartMatchPage />} />
@@ -83,6 +90,8 @@ export const App = () => {
         <Route path="profile" element={<ProfilePage />} />
         <Route path="settings" element={<SettingsPage />} />
         <Route path="social-links" element={<SocialLinksPage />} />
+		<Route path="access-denied" element={<AccessDenied />} />
+
       </Route>
 
       {/* Root Path */}
