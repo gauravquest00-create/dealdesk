@@ -20,7 +20,8 @@ import {
   FaCog,
   FaCheckCircle,
   FaClock,
-  FaTimes
+  FaTimes,
+  FaKey
 } from 'react-icons/fa';
 import './SuperAdminLayout.css';
 
@@ -144,6 +145,16 @@ export const SuperAdminLayout = () => {
             <NavLink to="/admin/businesses" className={({ isActive }) => `sa-nav-link ${isActive ? 'active' : ''}`}>
               <FaBuilding className="sa-nav-icon" />
               {!collapsed && <span className="sa-nav-label">Businesses</span>}
+            </NavLink>
+
+            {/* 🔥 NEW: Reset Business Password */}
+            <NavLink 
+              to="/admin/businesses/reset-password" 
+              className={({ isActive }) => `sa-nav-link ${isActive ? 'active' : ''}`}
+              title="Reset Business Password"
+            >
+              <FaKey className="sa-nav-icon" />
+              {!collapsed && <span className="sa-nav-label">Reset Password</span>}
             </NavLink>
 
             {!collapsed && <div className="sa-nav-section-label">BILLING</div>}
