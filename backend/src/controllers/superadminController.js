@@ -14,6 +14,7 @@ import Plan from '../models/Plan.js';
 import { ROLES } from '../constants/roles.js';
 import { ACCOUNT_STATUS, ENTITLEMENT_STATUS } from '../constants/statuses.js';
 import { generateSlug } from '../utils/slug.js';
+import { generateRandomPassword } from '../utils/generatePassword.js';
 
 // ============================================================
 // EXISTING FUNCTIONS (unchanged)
@@ -449,6 +450,69 @@ export const verifyPaymentForBusiness = async (req, res, next) => {
     });
 
     res.json({ success: true, message: 'Payment verified and subscription activated' });
+  } catch (err) {
+    next(err);
+  }
+};
+
+
+
+
+
+/**
+ * POST /api/superadmin/businesses/:businessId/reset-password
+ * Resets the BUSINESS ADMIN's password to a new random password.
+ * Only SUPERADMIN can call this.
+ */
+export const resetBusinessAdminPassword = async (req, res, next) => {
+  try {
+    const { businessId } = req.params;
+
+    const business = await Business.findById(businessId);
+    if (!business) {
+      return res.status(404).json({ success: false, message: 'Business not found' });
+    }
+
+    // Find the primary ADMIN of this business
+    const admin = await User.findOne({ businessId, role: ROLES.ADMIN });
+    if (!admin) {
+      return res.status(404).json({ success: false, message: 'No admin user found for this business' });
+    }
+
+    // Generate random password
+    const newPassword = generateRandomPassword(10);
+
+    // Hash using existing utility (same as createBusiness)
+    const { hashPassword } = await import('../utils/hash.js');
+    const hashed = await hashPassword(newPassword);
+
+    admin.passwordHash = hashed;
+    admin.mustChangePassword = true; // force password change on next login
+    await admin.save();
+
+    // Audit log (matches existing schema)
+    await AuditLog.create({
+      who: req.user.name || 'SuperAdmin',
+      role: 'SUPERADMIN',
+      businessId: business._id,
+      action: 'RESET_BUSINESS_ADMIN_PASSWORD',
+      targetType: 'User',
+      targetId: String(admin._id),
+      reason: `Super Admin reset password for admin of "${business.name}" (${admin.email})`,
+    }).catch(() => {});
+
+    res.json({
+      success: true,
+      message: 'Password reset successfully. Share it securely with the business admin.',
+      data: {
+        businessId: business._id,
+        businessName: business.name,
+        adminName: admin.name,
+        adminEmail: admin.email,
+        adminPhone: admin.phone || business.phone || '',
+        newPassword,
+      },
+    });
   } catch (err) {
     next(err);
   }
