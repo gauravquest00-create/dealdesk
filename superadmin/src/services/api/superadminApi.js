@@ -21,6 +21,10 @@ export const superadminApi = {
   toggleSuspension: (id, data) => apiClient.post(`/superadmin/businesses/${id}/suspend`, data),
   startSupportAccess: (id, data) => apiClient.post(`/superadmin/businesses/${id}/support-access`, data),
 
+  // 🔥 NEW: Reset Business Admin Password
+  resetBusinessAdminPassword: (businessId) =>
+    apiClient.post(`/superadmin/businesses/${businessId}/reset-password`),
+
   // ============================================================
   // PAYMENT / ORDERS (for creating business with payment)
   // ============================================================
